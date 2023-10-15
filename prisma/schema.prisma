@@ -10,12 +10,81 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  id Int @id @default(autoincrement())
-  username String @db.VarChar(50)
-  email String @db.VarChar(255) @unique
-  password String @db.VarChar(255)
-  firstName String @db.VarChar(50)
-  lastName String @db.VarChar(50)
-  profilePicture String? @db.VarChar(255) @default("")
+enum Content_Type {
+  COMMENT
+  THREAD
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  first_name      String    @db.VarChar(50)
+  last_name       String    @db.VarChar(50)
+  email           String    @unique @db.VarChar(255)
+  password        String    @db.VarChar(50)
+  profile_pic_url String    @db.VarChar(150)
+  like            Like[]
+  content         Content[]
+}
+
+model Content {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  content_description String @db.VarChar(300)
+  views               Int    @default(0)
+  owner_user_id       Int
+  owner_user          User   @relation(fields: [owner_user_id], references: [id], onDelete: Cascade)
+
+  content_parent_id Int?     @unique
+  content_parent    Content? @relation("ChildContents", fields: [content_parent_id], references: [id])
+
+  child_contents Content[] @relation("ChildContents")
+  like           Like[]
+  thread         Thread[]
+  comment        Comment[]
+
+  @@index([owner_user_id])
+  @@index([content_description])
+}
+
+model Like {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  last_name String @db.VarChar(50)
+
+  user_id    Int
+  user       User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  content_id Int
+  content    Content @relation(fields: [content_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([content_id])
+}
+
+model Thread {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  title String @db.VarChar(100)
+
+  content_id Int
+  content    Content @relation(fields: [content_id], references: [id], onDelete: Cascade)
+
+  @@index([content_id])
+}
+
+model Comment {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  content_id Int
+  content    Content @relation(fields: [content_id], references: [id], onDelete: Cascade)
 }
