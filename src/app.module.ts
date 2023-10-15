@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { PrismaModule } from './prisma/prisma.module';
 import { HealthModule } from './health/health.module';
 import { ConfigModule } from '@nestjs/config';
@@ -14,6 +15,7 @@ import { NotFoundExceptionFilter } from './common/404.filter';
       isGlobal: true,
       envFilePath: join(cwd(), '.env'),
     }),
+    HttpModule,
     PrismaModule,
     HealthModule,
     AuthModule,

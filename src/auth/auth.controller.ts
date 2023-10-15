@@ -5,30 +5,26 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  UseGuards,
+  Session,
 } from '@nestjs/common';
 import { SignInDto, SignUpDto } from './dto';
 import { AuthService } from './auth.service';
-import { Public } from './auth.metadata';
 import { User as UserDecorator } from './auth.decorator';
 import { User } from '@prisma/client';
-import { AuthGuard } from './auth.guard';
+import { Session as SessionRecord } from '../common/session';
 
 @Controller('auth')
-@UseGuards(AuthGuard)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Public()
   @HttpCode(HttpStatus.OK)
-  @Post('login')
-  signIn(@Body() dto: SignInDto) {
-    return this.authService.signIn(dto);
+  @Post('signin')
+  signIn(@Session() session: SessionRecord, @Body() dto: SignInDto) {
+    return this.authService.signIn(session, dto);
   }
 
-  @Public()
   @HttpCode(HttpStatus.CREATED)
-  @Post('register')
+  @Post('signup')
   signUp(@Body() dto: SignUpDto) {
     return this.authService.signUp(dto);
   }

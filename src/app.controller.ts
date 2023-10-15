@@ -1,4 +1,4 @@
-import { Get, Controller, Render } from '@nestjs/common';
+import { Controller, Get, Render } from '@nestjs/common';
 
 @Controller()
 export class AppController {
@@ -6,5 +6,17 @@ export class AppController {
   @Render('index')
   root() {
     return { message: 'Hello world!' };
+  }
+
+  @Get('signup')
+  @Render('signup')
+  signup() {
+    return { errors: [] };
+  }
+
+  @Get('signin')
+  @Render('signin')
+  signin() {
+    return { errors: [] };
   }
 }

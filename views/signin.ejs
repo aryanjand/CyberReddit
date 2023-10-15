@@ -1,0 +1,21 @@
+<%- include("templates/header", { logout: false }) %>
+<style>
+  #error { color: red; }
+</style>
+<div class="nes-container with-title is-centered">
+  <p class="title">Sign In</p>
+  <form action="/auth/signin" method="post">
+    <input name="email" type="text" placeholder="Email" />
+    <input name="password" type="password" placeholder="Password" />
+    <button>Submit</button>
+  </form>
+  <% if (errors) { %>
+    <ul id=error style="list-style: none; padding: 0;">
+      <% for (let i = 0; i < errors.length; i++) { %>
+        <li><%= errors[i] %></li>
+      <% } %>
+    </ul>
+  <% } %>
+  <div>Don't have an account? <a href="/signup">Sign-Up</a></div>
+</div>
+<%- include("templates/footer") %>

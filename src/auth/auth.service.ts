@@ -6,24 +6,20 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { SignInDto, SignUpDto } from './dto';
 import { User } from '@prisma/client';
+import { Session } from '../common/session';
 
 @Injectable()
 export class AuthService {
   private readonly saltRounds: number;
 
-  constructor(
-    private prisma: PrismaService,
-    private jwt: JwtService,
-    private config: ConfigService,
-  ) {
+  constructor(private prisma: PrismaService, private config: ConfigService) {
     this.saltRounds = this.config.get('SALT_ROUNDS', 12);
   }
 
-  async signIn(dto: SignInDto) {
+  async signIn(session: Session, dto: SignInDto) {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -36,12 +32,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const token = await this.jwt.signAsync(user, {
-      secret: this.config.get('JWT_SECRET', 'DevSecret123'),
-    });
+    session.authenticated = true;
+    session.user_id = user.id;
 
-    //  TODO: Implement Refresh Token and better response
-    return { token };
+    return;
   }
 
   async signUp(dto: SignUpDto) {
