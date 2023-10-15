@@ -1,9 +1,14 @@
 import * as bcrypt from 'bcrypt';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { SignInDto } from './dto';
+import { SignInDto, SignUpDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -30,11 +35,34 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const jwtToken = await this.jwt.signAsync(user, {
+    const token = await this.jwt.signAsync(user, {
       secret: this.config.get('JWT_SECRET', 'DevSecret123'),
     });
 
     //  TODO: Implement Refresh Token and better response
-    return jwtToken;
+    return { token };
+  }
+
+  async signUp(dto: SignUpDto) {
+    try {
+      await this.prisma.user.create({
+        data: {
+          email: dto.email,
+          password: bcrypt.hashSync(dto.password, this.saltRounds),
+          username: dto.username,
+          firstName: dto.firstName,
+          lastName: dto.lastName,
+          profilePicture: dto.profilePicture,
+        },
+      });
+    } catch (err) {
+      if (err.code === 'P2002') {
+        throw new HttpException('Credentials taken', HttpStatus.CONFLICT);
+      }
+      throw new HttpException(
+        'Something went wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
