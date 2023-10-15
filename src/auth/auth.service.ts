@@ -31,7 +31,7 @@ export class AuthService {
     }
 
     const jwtToken = await this.jwt.signAsync(user, {
-      secret: this.config.get('JWT_SECRET', 'dev'),
+      secret: this.config.get('JWT_SECRET', 'DevSecret123'),
     });
 
     //  TODO: Implement Refresh Token and better response

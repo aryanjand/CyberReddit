@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 
 @Module({
   imports: [
-    JwtModule.register({ global: true, signOptions: { expiresIn: '48hr' } }),
+    JwtModule.register({ global: true, signOptions: { expiresIn: '24hr' } }),
   ],
   controllers: [AuthController],
   providers: [AuthService],
