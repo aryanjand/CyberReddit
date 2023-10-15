@@ -6,7 +6,7 @@ import { join } from 'path';
 import { cwd } from 'process';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
-import { AuthGuard } from './auth/auth.guard';
+import { NotFoundExceptionFilter } from './common/404.filter';
 
 @Module({
   imports: [
@@ -21,8 +21,8 @@ import { AuthGuard } from './auth/auth.guard';
   controllers: [AppController],
   providers: [
     {
-      provide: 'APP_GUARD',
-      useClass: AuthGuard,
+      provide: 'APP_FILTER',
+      useClass: NotFoundExceptionFilter,
     },
   ],
 })

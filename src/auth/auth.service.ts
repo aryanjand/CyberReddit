@@ -9,11 +9,12 @@ import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { SignInDto, SignUpDto } from './dto';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
-  // TODO: Implement Sign up
-  private readonly saltRounds;
+  private readonly saltRounds: number;
+
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
@@ -63,5 +64,15 @@ export class AuthService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async profile(user: User) {
+    return {
+      id: user.id,
+      email: user.email,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      profilePicture: user.profile_pic_url,
+    };
   }
 }
