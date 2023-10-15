@@ -49,10 +49,9 @@ export class AuthService {
         data: {
           email: dto.email,
           password: bcrypt.hashSync(dto.password, this.saltRounds),
-          username: dto.username,
-          firstName: dto.firstName,
-          lastName: dto.lastName,
-          profilePicture: dto.profilePicture,
+          first_name: dto.firstName,
+          last_name: dto.lastName,
+          profile_pic_url: dto.profilePicture,
         },
       });
     } catch (err) {
