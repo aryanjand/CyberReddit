@@ -7,6 +7,6 @@
 
 */
 -- AlterTable
-ALTER TABLE `user` ADD COLUMN `firstName` VARCHAR(50) NOT NULL,
+ALTER TABLE `User` ADD COLUMN `firstName` VARCHAR(50) NOT NULL,
     ADD COLUMN `lastName` VARCHAR(50) NOT NULL,
     ADD COLUMN `profilePicture` VARCHAR(255) NOT NULL;

@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `user` MODIFY `profilePicture` VARCHAR(255) NULL DEFAULT '';
+ALTER TABLE `User` MODIFY `profilePicture` VARCHAR(255) NULL DEFAULT '';

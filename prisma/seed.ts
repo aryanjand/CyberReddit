@@ -8,11 +8,10 @@ async function main() {
     update: {},
     create: {
       email: 'dummy@mail.com',
-      firstName: 'Dummy',
-      lastName: 'User',
+      first_name: 'Dummy',
+      last_name: 'User',
       password: '$2a$12$KfR9eNC9fxFBviwsjWffaOeuGNw3QJL6ubqg9KfP9gJw/JMMAMf8O',
-      username: 'dummy',
-      profilePicture:
+      profile_pic_url:
         'https://soccerpointeclaire.com/wp-content/uploads/2021/06/default-profile-pic-e1513291410505.jpg',
     },
   });
@@ -22,11 +21,10 @@ async function main() {
     update: {},
     create: {
       email: 'oscar@mail.com',
-      firstName: 'Oscar',
-      lastName: 'Zhu',
+      first_name: 'Oscar',
+      last_name: 'Zhu',
       password: '$2a$12$KfR9eNC9fxFBviwsjWffaOeuGNw3QJL6ubqg9KfP9gJw/JMMAMf8O',
-      username: 'oscar',
-      profilePicture:
+      profile_pic_url:
         'https://i1.sndcdn.com/avatars-000289303766-rx3hqe-t500x500.jpg',
     },
   });
@@ -37,11 +35,10 @@ async function main() {
 
     create: {
       email: 'aryan@mail.com',
-      firstName: 'Aryan',
-      lastName: 'Rand',
+      first_name: 'Aryan',
+      last_name: 'Rand',
       password: '$2a$12$KfR9eNC9fxFBviwsjWffaOeuGNw3QJL6ubqg9KfP9gJw/JMMAMf8O',
-      username: 'aryan',
-      profilePicture:
+      profile_pic_url:
         'https://e-cdn-images.dzcdn.net/images/cover/0deaf901c342a234d16ab55d65b44b81/264x264-000000-80-0-0.jpg',
     },
   });
