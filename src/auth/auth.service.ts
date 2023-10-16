@@ -33,6 +33,8 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    delete user.password;
+
     session.authenticated = true;
     session.user = user;
 
