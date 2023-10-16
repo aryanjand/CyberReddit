@@ -1,0 +1,8 @@
+<%- include("templates/header", { logout: true }) %>
+<div class="nes-container with-title is-centered">
+  <p class="title">Profile</p>
+  <div>Email: <%= user.email %></div>
+  <div>First Name: <%= user.first_name %></div>
+  <div>Last Name: <%= user.last_name %></div>
+  <img src="<%= user.profile_pic_url %>" />
+<%- include("templates/footer") %>
