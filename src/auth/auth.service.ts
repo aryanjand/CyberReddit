@@ -10,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 import { SignInDto, SignUpDto } from './dto';
 import { User } from '@prisma/client';
 import { UserSession } from '../common';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -58,6 +59,14 @@ export class AuthService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async signOut(req: Request, res: Response) {
+    res.clearCookie('connect.sid');
+    req.session.destroy((err) => {
+      if (err) throw new HttpException(err, HttpStatus.SERVICE_UNAVAILABLE);
+    });
+    return res.redirect('/');
   }
 
   async profile(user: User) {

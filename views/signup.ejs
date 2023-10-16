@@ -6,7 +6,7 @@
 </style>
 <div class="nes-container with-title is-centered">
   <p class="title">Sign Up</p>
-  <form action="/auth/signup" method="post">
+  <form action="/signup" method="post">
     <input name="firstName" type="text" placeholder="First Name" />
     <input name="lastName" type="text" placeholder="Last Name" />
     <input name="email" type="text" placeholder="Email" />
@@ -25,6 +25,6 @@
       <% } %>
     </ul>
   <% } %>
-  <div>Have an account? <a href="/">Login</a></div>
+  <div>Have an account? <a href="/signin">Login</a></div>
 </div>
 <%- include("templates/footer") %>

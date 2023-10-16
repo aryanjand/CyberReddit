@@ -5,23 +5,27 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Req,
   Response as Res,
   Session,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { Response } from 'express';
-import { Public, AuthGuard, UserSession } from '../common';
+import { Request, Response } from 'express';
+import { AuthGuard, Public, UserSession } from '../common';
 import { User as UserDecorator } from './auth.decorator';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dto';
+import { SignInExceptionFilter, SignUpExceptionFilter } from './filters';
 
 @UseGuards(AuthGuard)
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Public()
+  @UseFilters(SignInExceptionFilter)
   @HttpCode(HttpStatus.OK)
   @Post('signin')
   async signIn(
@@ -34,10 +38,19 @@ export class AuthController {
   }
 
   @Public()
+  @UseFilters(SignUpExceptionFilter)
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
-  signUp(@Body() dto: SignUpDto) {
-    return this.authService.signUp(dto);
+  async signUp(@Res() res: Response, @Body() dto: SignUpDto) {
+    await this.authService.signUp(dto);
+    return res.redirect('/');
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Get('signout')
+  signOut(@Req() req: Request, @Res() res: Response) {
+    return this.authService.signOut(req, res);
   }
 
   @HttpCode(HttpStatus.OK)
