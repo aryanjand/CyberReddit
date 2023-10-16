@@ -67,7 +67,6 @@ export class AuthController {
   @Render('profile')
   @Get('profile')
   profile(@UserDecorator() user: User) {
-    console.log(user);
     return { user: user };
   }
 }
