@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Render,
   Response as Res,
   Session,
   UseFilters,
@@ -12,19 +13,23 @@ import {
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { Response } from 'express';
-import { AuthGuard, Public, UserSession } from '../common';
+import { AuthGuard, UserSession } from '../common';
 import { User as UserDecorator } from './auth.decorator';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dto';
-import { SignInExceptionFilter, SignUpExceptionFilter } from './filters';
+import { AuthExceptionFilter } from './filters/';
 
-@UseGuards(AuthGuard)
 @Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Public()
-  @UseFilters(SignInExceptionFilter)
+  @Get('signin')
+  @Render('signin')
+  signin() {
+    return { errors: [] };
+  }
+
+  @UseFilters(AuthExceptionFilter)
   @HttpCode(HttpStatus.OK)
   @Post('signin')
   async signIn(
@@ -36,8 +41,13 @@ export class AuthController {
     return res.redirect('/');
   }
 
-  @Public()
-  @UseFilters(SignUpExceptionFilter)
+  @Get('signup')
+  @Render('signup')
+  signup() {
+    return { errors: [] };
+  }
+
+  @UseFilters(AuthExceptionFilter)
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
   async signUp(@Res() res: Response, @Body() dto: SignUpDto) {
@@ -45,13 +55,13 @@ export class AuthController {
     return res.redirect('/');
   }
 
-  @Public()
   @HttpCode(HttpStatus.OK)
   @Get('signout')
   signOut(@Session() session: UserSession, @Res() res: Response) {
     return this.authService.signOut(session, res);
   }
 
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get('profile')
   profile(@UserDecorator() user: User) {
