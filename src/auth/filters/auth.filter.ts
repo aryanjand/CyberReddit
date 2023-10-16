@@ -4,23 +4,27 @@ import {
   ExceptionFilter,
   HttpException,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { RouteTree } from '@nestjs/core';
+import { Request, Response } from 'express';
 
 @Catch(HttpException)
-export class SignInExceptionFilter implements ExceptionFilter {
+export class AuthExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
+
+    const route: RouteTree = request.route;
 
     response.status(exception.getStatus());
 
     if (exception.getResponse()['message'] === 'Invalid credentials') {
-      return response.render('signin', {
+      return response.render(route.path.split('/')[1], {
         errors: [exception.getResponse()['message']],
       });
     }
 
-    return response.render('signin', {
+    return response.render(route.path.split('/')[1], {
       errors: exception.getResponse()['message'],
     });
   }

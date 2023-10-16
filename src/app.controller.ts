@@ -7,16 +7,4 @@ export class AppController {
   root() {
     return { message: 'Hello world!' };
   }
-
-  @Get('signup')
-  @Render('signup')
-  signup() {
-    return { errors: [] };
-  }
-
-  @Get('signin')
-  @Render('signin')
-  signin() {
-    return { errors: [] };
-  }
 }
