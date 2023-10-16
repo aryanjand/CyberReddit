@@ -47,7 +47,6 @@ async function main() {
 }
 
 main()
-  .then(async () => {})
   .catch(async (e) => {
     console.error(e);
   })
