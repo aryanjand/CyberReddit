@@ -23,7 +23,7 @@ async function bootstrap() {
     origin: '*',
   });
 
-  app.use(helmet());
+  // app.use(helmet());
 
   app.use(
     session({
