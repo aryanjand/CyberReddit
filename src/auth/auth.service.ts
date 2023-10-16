@@ -1,16 +1,16 @@
-import * as bcrypt from 'bcrypt';
 import {
   HttpException,
   HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { SignInDto, SignUpDto } from './dto';
 import { User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { Response } from 'express';
 import { UserSession } from '../common';
-import { Request, Response } from 'express';
+import { PrismaService } from '../prisma/prisma.service';
+import { SignInDto, SignUpDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -61,10 +61,13 @@ export class AuthService {
     }
   }
 
-  async signOut(req: Request, res: Response) {
+  async signOut(session: UserSession, res: Response) {
     res.clearCookie('connect.sid');
-    req.session.destroy((err) => {
-      if (err) throw new HttpException(err, HttpStatus.SERVICE_UNAVAILABLE);
+
+    session.destroy((err) => {
+      if (err) {
+        throw new HttpException(err.message, HttpStatus.SERVICE_UNAVAILABLE);
+      }
     });
     return res.redirect('/');
   }

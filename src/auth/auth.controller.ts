@@ -5,14 +5,13 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Req,
   Response as Res,
   Session,
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { AuthGuard, Public, UserSession } from '../common';
 import { User as UserDecorator } from './auth.decorator';
 import { AuthService } from './auth.service';
@@ -49,8 +48,8 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Get('signout')
-  signOut(@Req() req: Request, @Res() res: Response) {
-    return this.authService.signOut(req, res);
+  signOut(@Session() session: UserSession, @Res() res: Response) {
+    return this.authService.signOut(session, res);
   }
 
   @HttpCode(HttpStatus.OK)
