@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>App</title>
-  </head>
-  <body>
-  <h1>404 - Page Not Found</h1>
-  </body>
-</html>
+<%- include("templates/header", { logout: true }) %>
+<div class="nes-container with-title is-centered">
+  <div>404 - Not Found</div>
+  <a href="/"><button class="m-3">Back to Homepage<button></a>
+</div>
+<%- include("templates/footer") %>

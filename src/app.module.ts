@@ -7,7 +7,7 @@ import { join } from 'path';
 import { cwd } from 'process';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
-import { NotFoundExceptionFilter } from './common/404.filter';
+import { NotFoundExceptionFilter } from './common/filters/not-found.filter';
 
 @Module({
   imports: [
