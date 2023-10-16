@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { Response } from 'express';
-import { AuthGuard, UserSession } from '../common';
+import { AuthGuard, SessionExceptionFilter, UserSession } from '../common';
 import { User as UserDecorator } from './auth.decorator';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dto';
@@ -62,9 +62,12 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard)
+  @UseFilters(SessionExceptionFilter)
   @HttpCode(HttpStatus.OK)
+  @Render('profile')
   @Get('profile')
   profile(@UserDecorator() user: User) {
-    return this.authService.profile(user);
+    console.log(user);
+    return { user: user };
   }
 }
