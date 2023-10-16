@@ -18,12 +18,28 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
+  app.use(helmet({ contentSecurityPolicy: false }));
+
+  // app.use(
+  //   helmet({
+  //     contentSecurityPolicy: {
+  //       directives: {
+  //         defaultSrc: ["'self'"],
+  //         scriptSrc: [
+  //           "'self'",
+  //           'https://code.jquery.com',
+  //           'https://cdn.jsdelivr.net',
+  //         ],
+  //         imgSrc: ["'self'", 'data:', 'https://i1.sndcdn.com'],
+  //       },
+  //     },
+  //   }),
+  // );
+
   // TODO: set origin to the frontend url once it's deployed.
   app.enableCors({
     origin: '*',
   });
-
-  app.use(helmet());
 
   app.use(
     session({
