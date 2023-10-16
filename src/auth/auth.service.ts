@@ -9,7 +9,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { SignInDto, SignUpDto } from './dto';
 import { User } from '@prisma/client';
-import { Session } from '../common/session';
+import { UserSession } from '../common';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +19,7 @@ export class AuthService {
     this.saltRounds = this.config.get('SALT_ROUNDS', 12);
   }
 
-  async signIn(session: Session, dto: SignInDto) {
+  async signIn(session: UserSession, dto: SignInDto) {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -33,7 +33,7 @@ export class AuthService {
     }
 
     session.authenticated = true;
-    session.user_id = user.id;
+    session.user = user;
 
     return;
   }
