@@ -5,7 +5,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { UserSession } from 'src/common';
+import { UserSession } from '../common';
 
 @Catch(HttpException)
 export class ProfilePicExceptionFilter implements ExceptionFilter {
