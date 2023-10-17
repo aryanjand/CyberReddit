@@ -11,7 +11,6 @@ import {
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
-import { User } from '@prisma/client';
 import { Response } from 'express';
 import {
   AuthGuard,
@@ -19,7 +18,6 @@ import {
   SessionExceptionFilter,
   UserSession,
 } from '../common';
-import { User as UserDecorator } from './auth.decorator';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dto';
 
@@ -70,7 +68,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Render('profile')
   @Get('profile')
-  profile(@UserDecorator() user: User) {
-    return { user: user, errors: [] };
+  profile(@Session() session: UserSession) {
+    return { user: session.user, errors: [] };
   }
 }
