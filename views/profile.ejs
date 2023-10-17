@@ -1,8 +1,21 @@
 <%- include("templates/header", { logout: true }) %>
-<div class="nes-container with-title is-centered">
-  <p class="title">Profile</p>
-  <div>Email: <%= user.email %></div>
-  <div>First Name: <%= user.first_name %></div>
-  <div>Last Name: <%= user.last_name %></div>
-  <img src="<%= user.profile_pic_url %>" />
+<div class="cyber-banner w-100 p-3" style="height: 100%; min-height: 70vh">
+  <h3 class="cyberpunk-font">Welcome back <%= user.first_name %></h3>
+  <div class="row">
+    <div class="col-md-6 order-1 order-md-2">
+      <p class="oxanium-font">First Name: <%= user.first_name %></p>
+      <p class="oxanium-font">Last Name: <%= user.last_name %></p>
+      <p class="oxanium-font">Email: <%= user.email %></p>
+    </div>
+    <div class="col-md-6 order-2 order-md-1">
+      <div class="cyber-tile bg-red p-3">
+        <img
+          src="<%= user.profile_pic_url %>"
+          class="img-fluid"
+          alt="Profile Picture"
+        />
+      </div>
+    </div>
+  </div>
+</div>
 <%- include("templates/footer") %>
