@@ -34,17 +34,20 @@
         <% } %>
 </head>
 
-<body class="bg-yellow">
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+<body class="">
+  <nav id="header" class="navbar navbar-expand-lg bg-black fg-white cyber-razor-bottom pt-0 pl-8 pb-4">
     <div class="container-fluid">
       <div class="navbar-brand">
         <%- !logout ? '<a href="/content/view-content"><button class="cyber-button bg-blue fg-white">View Content</button></a>'
-          : '<a href="/content/view-content"><button class="cyber-button bg-blue fg-white">View Content</button></a> / <a href="/content/my-content"><button class="cyber-button bg-green fg-white">My Content</button></a> / <a href="/chatbot"><button class="cyber-button bg-purple fg-white">Chat</button></a>'
+          : '<a href="/content/view-content"><button class="cyber-button bg-blue fg-white">View Content</button></a> / <a href="/content/my-content"><button class="cyber-button bg-green fg-white">My Content</button></a>'
           %>
       </div>
+      <span class="cyberpunk-font-og f-x2-5">
+        <span class="c">C</span>yber <span class="p">R</span>ead-<span class="p">I</span> 
+    </span>
       <div class="navbar-brand ms-auto"> <!-- `ms-auto` pushes this div to the right -->
         <%- !logout
-          ? '<a href="/signin"><button class="cyber-button bg-white fg-black">Login</button></a> / <a href="/signup"><button class="cyber-button bg-cyan fg-white">Sign Up</button></a>'
+          ? '<a href="/signin"><button class="cyber-button bg-dark fg-white">Login</button></a> / <a href="/signup"><button class="cyber-button bg-cyan fg-white">Sign Up</button></a>'
           : '<a href="/signout"><button class="cyber-button bg-red fg-white">Logout</button></a>' %>
       </div>
     </div>
