@@ -1,21 +1,36 @@
 <%- include("templates/header", { logout: false }) %>
 <style>
-  #error { color: red; }
+  #error {
+    color: red;
+  }
 </style>
-<div class="nes-container with-title is-centered">
-  <p class="title">Sign In</p>
-  <form action="/signin" method="post">
-    <input name="email" type="text" placeholder="Email" />
-    <input name="password" type="password" placeholder="Password" />
-    <button>Submit</button>
-  </form>
-  <% if (errors) { %>
-    <ul id=error style="list-style: none; padding: 0;">
+<div class="container">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="cyberpunk-font">Welcome to Cyber-ReadiT</h1>
+    <h2 class="cyberpunk-font">Sign In</h2>
+    <form action="/signin" method="post">
+      <div class="cyber-input mb-3">
+        <input name="email" type="text" placeholder="Email" />
+      </div>
+      <div class="cyber-input mb-3">
+        <input name="password" type="password" placeholder="Password" />
+      </div>
+      <button class="cyber-button bg-purple fg-white">
+        Submit
+        <span class="glitchtext">Submit</span>
+        <span class="tag">R25</span>
+      </button>
+    </form>
+    <% if (errors) { %>
+    <ul id="error" style="list-style: none; padding: 0">
       <% for (let i = 0; i < errors.length; i++) { %>
-        <li><%= errors[i] %></li>
+      <li><%= errors[i] %></li>
       <% } %>
     </ul>
-  <% } %>
-  <div>Don't have an account? <a href="/signup">Sign-Up</a></div>
+    <% } %>
+    <span class="oxanium-font">
+      Don't have an account? <a href="/signup">Sign-Up</a>
+    </span>
+  </div>
 </div>
 <%- include("templates/footer") %>

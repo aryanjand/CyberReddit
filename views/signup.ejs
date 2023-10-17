@@ -4,27 +4,44 @@
     color: red;
   }
 </style>
-<div class="nes-container with-title is-centered">
-  <p class="title">Sign Up</p>
-  <form action="/signup" method="post">
-    <input name="firstName" type="text" placeholder="First Name" />
-    <input name="lastName" type="text" placeholder="Last Name" />
-    <input name="email" type="text" placeholder="Email" />
-    <input name="password" type="password" placeholder="Password" />
-    <input
-      name="confirmPassword"
-      type="password"
-      placeholder="Confirm Password"
-    />
-    <button class="m-3">Submit</button>
-  </form>
-  <% if (errors) { %>
-    <ul id=error style="list-style: none; padding: 0;">
+<div class="container">
+  <div class="d-flex flex-column align-items-center">
+    <h1 class="cyberpunk-font">Welcome to Cyber-ReadiT</h1>
+    <h2 class="cyberpunk-font">Sign Up</h2>
+    <form action="/signup" method="post">
+      <div class="cyber-input mb-3">
+        <input name="firstName" type="text" placeholder="First Name" />
+      </div>
+      <div class="cyber-input mb-3">
+        <input name="lastName" type="text" placeholder="Last Name" />
+      </div>
+      <div class="cyber-input mb-3">
+        <input name="email" type="text" placeholder="Email" />
+      </div>
+      <div class="cyber-input mb-3">
+        <input name="password" type="password" placeholder="Password" />
+      </div>
+      <div class="cyber-input mb-3">
+        <input
+          name="confirmPassword"
+          type="password"
+          placeholder="Confirm Password"
+        />
+      </div>
+      <button class="cyber-button bg-purple fg-white">
+        Submit
+        <span class="glitchtext">Submit</span>
+        <span class="tag">R25</span>
+      </button>
+    </form>
+    <% if (errors) { %>
+    <ul id="error" style="list-style: none; padding: 0">
       <% for (let i = 0; i < errors.length; i++) { %>
-        <li><%= errors[i] %></li>
+      <li><%= errors[i] %></li>
       <% } %>
     </ul>
-  <% } %>
-  <div>Have an account? <a href="/signin">Login</a></div>
+    <% } %>
+    <div>Have an account? <a href="/signin">Login</a></div>
+  </div>
 </div>
 <%- include("templates/footer") %>
