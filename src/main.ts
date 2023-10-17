@@ -23,6 +23,7 @@ async function bootstrap() {
   // app.use(helmet({ contentSecurityPolicy: false }));
 
   app.use((_req: any, res: Response, next: NextFunction) => {
+    res.locals.baseUrl = process.env.BASE_URL;
     res.locals.nonce = crypto.randomBytes(16).toString('hex');
     next();
   });
