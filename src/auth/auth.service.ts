@@ -73,14 +73,4 @@ export class AuthService {
     });
     return res.redirect('/');
   }
-
-  async profile(user: User) {
-    return {
-      id: user.id,
-      email: user.email,
-      firstName: user.first_name,
-      lastName: user.last_name,
-      profilePicture: user.profile_pic_url,
-    };
-  }
 }
