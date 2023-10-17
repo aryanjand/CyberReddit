@@ -54,8 +54,10 @@ async function bootstrap() {
       secret: process.env.SESSION_SECRET,
       saveUninitialized: false,
       resave: false,
-      // Secure set to true when HTTPS is enabled
-      cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 },
+      cookie: {
+        secure: process.env.NODE_ENV === 'production' ? true : false,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+      },
       store: MongoStore.create({
         mongoUrl: process.env.MONGO_URL,
         crypto: { secret: process.env.MONGO_SECRET },
