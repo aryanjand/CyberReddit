@@ -2,7 +2,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import MongoStore from 'connect-mongo';
+import crypto from 'crypto';
 import 'dotenv/config';
+import { NextFunction, Response } from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
 import { join } from 'path';
@@ -18,23 +20,29 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
-  app.use(helmet({ contentSecurityPolicy: false }));
+  // app.use(helmet({ contentSecurityPolicy: false }));
 
-  // app.use(
-  //   helmet({
-  //     contentSecurityPolicy: {
-  //       directives: {
-  //         defaultSrc: ["'self'"],
-  //         scriptSrc: [
-  //           "'self'",
-  //           'https://code.jquery.com',
-  //           'https://cdn.jsdelivr.net',
-  //         ],
-  //         imgSrc: ["'self'", 'data:', 'https://i1.sndcdn.com'],
-  //       },
-  //     },
-  //   }),
-  // );
+  app.use((_req: any, res: Response, next: NextFunction) => {
+    res.locals.nonce = crypto.randomBytes(16).toString('hex');
+    next();
+  });
+
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: [
+            "'self'",
+            (_req, res: Response) => `'nonce-${res.locals.nonce}'`,
+            'https://code.jquery.com',
+            'https://cdn.jsdelivr.net',
+          ],
+          imgSrc: ["'self'", 'data:', 'https://res.cloudinary.com'],
+        },
+      },
+    }),
+  );
 
   // TODO: set origin to the frontend url once it's deployed.
   app.enableCors({
