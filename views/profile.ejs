@@ -1,39 +1,52 @@
-<%- include("templates/header", { logout: true }) %>
-<%- include("add-profile-pic-modal") %>
+<%- include("templates/header", { logout: true }) %> <%
+include("add-profile-pic-modal") %>
 <style>
   img {
-      width: 33%;
-      object-fit: contain;
-    }
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
   #error {
-    color: red; 
+    color: red;
   }
 </style>
-<div class="nes-container with-title is-centered">
-  <p class="title">Profile</p>
-  <div>Email: <%= user.email %></div>
-  <div>First Name: <%= user.first_name %></div>
-  <div>Last Name: <%= user.last_name %></div>
-  <img src="<%= user.profile_pic_url %>" />
-  <button
-    id="trigger-modal"
-    class="nes-btn is-secondary"
-    data-toggle="modal"
-    data-target="#create-content-modal"
-  >
-    Change Profile Picture
-  </button>
+<div class="cyber-banner w-100 p-3" style="height: 100%; min-height: 70vh">
+  <h3 class="cyberpunk-font">Welcome back <%= user.first_name %></h3>
+  <div class="row">
+    <div
+      class="col-md-6"
+      style="display: flex; flex-direction: column; align-items: flex-end"
+    >
+      <div class="cyber-tile bg-red p-3">
+        <img src="<%= user.profile_pic_url %>" />
+      </div>
+      <button
+        id="trigger-modal"
+        class="cyber-button-small bg-white fg-black"
+        data-toggle="modal"
+        data-target="#create-content-modal"
+      >
+        Change Profile Picture
+      </button>
+    </div>
+
+    <div class="col-md-6">
+      <p class="oxanium-font">First Name: <%= user.first_name %></p>
+      <p class="oxanium-font">Last Name: <%= user.last_name %></p>
+      <p class="oxanium-font">Email: <%= user.email %></p>
+    </div>
+  </div>
   <% if (errors) { %>
-    <ul id=error style="list-style: none; padding: 0;">
-        <li><%= errors %></li>
-    </ul>
+  <ul id="error" style="list-style: none; padding: 0">
+    <li><%= errors %></li>
+  </ul>
   <% } %>
 </div>
 <script nonce="<%= nonce %>">
-$(document).ready(function () {
-  $('#create-content-modal').on('shown.bs.modal', function () {
-    $('#trigger-modal').trigger('focus');
+  $(document).ready(function () {
+    $('#create-content-modal').on('shown.bs.modal', function () {
+      $('#trigger-modal').trigger('focus');
+    });
   });
-});
 </script>
 <%- include("templates/footer") %>
