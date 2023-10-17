@@ -15,7 +15,14 @@
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-  <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
+  <script src="./jquery-3.6.1.min.js"></script>
+  <script src="./helper.js?v=3"></script>
+
+  <link rel="stylesheet" href="./cyber-grid.css">
+  <link rel="stylesheet" href="./cyberpunk.css">
+  <link rel="stylesheet" href="./style.css">
+
+  <link rel="icon" type="image/png" href="./img/favicon.png" sizes="512x512">
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,18 +34,18 @@
         <% } %>
 </head>
 
-<body>
+<body class="bg-yellow">
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
       <div class="navbar-brand">
-        <%- !logout ? '<a href="/content/view-content"><button class="nes-btn">View Content</button></a>'
-          : '<a href="/content/view-content"><button class="nes-btn">View Content</button></a> / <a href="/content/my-content"><button class="nes-btn">My Content</button></a> / <a href="/chatbot"><button class="nes-btn">Chat</button></a>'
+        <%- !logout ? '<a href="/content/view-content"><button class="cyber-button bg-blue fg-white">View Content</button></a>'
+          : '<a href="/content/view-content"><button class="cyber-button bg-blue fg-white">View Content</button></a> / <a href="/content/my-content"><button class="cyber-button bg-green fg-white">My Content</button></a> / <a href="/chatbot"><button class="cyber-button bg-purple fg-white">Chat</button></a>'
           %>
       </div>
       <div class="navbar-brand ms-auto"> <!-- `ms-auto` pushes this div to the right -->
         <%- !logout
-          ? '<a href="/signin"><button class="nes-btn is-primary">Login</button></a> / <a href="/signup"><button class="nes-btn is-success">Sign Up</button></a>'
-          : '<a href="/signout"><button class="nes-btn is-error">Logout</button></a>' %>
+          ? '<a href="/signin"><button class="cyber-button bg-white fg-black">Login</button></a> / <a href="/signup"><button class="cyber-button bg-cyan fg-white">Sign Up</button></a>'
+          : '<a href="/signout"><button class="cyber-button bg-red fg-white">Logout</button></a>' %>
       </div>
     </div>
   </nav>
