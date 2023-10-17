@@ -36,7 +36,7 @@ async function main() {
     create: {
       email: 'aryan@mail.com',
       first_name: 'Aryan',
-      last_name: 'Rand',
+      last_name: 'Jand',
       password: '$2a$12$KfR9eNC9fxFBviwsjWffaOeuGNw3QJL6ubqg9KfP9gJw/JMMAMf8O',
       profile_pic_url:
         'https://res.cloudinary.com/dj6rvkhvo/image/upload/v1697499479/avatars/3/l3xnzzi2hqww2ulfiblq.jpg',
