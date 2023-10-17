@@ -41,13 +41,13 @@ export class AuthService {
     return;
   }
 
-  async signUp(dto: SignUpDto) {
+  async signUp(session: UserSession, dto: SignUpDto) {
     if (dto.password !== dto.confirmPassword) {
       throw new ValidationException('Passwords do not match');
     }
 
     try {
-      await this.prisma.user.create({
+      const user = await this.prisma.user.create({
         data: {
           email: dto.email,
           password: bcrypt.hashSync(dto.password, this.saltRounds),
@@ -56,6 +56,13 @@ export class AuthService {
           profile_pic_url: dto.profilePicture,
         },
       });
+
+      delete user.password;
+
+      session.authenticated = true;
+      session.user = user;
+
+      return;
     } catch (err) {
       if (err.code === 'P2002') {
         throw new ValidationException('Credentials taken');

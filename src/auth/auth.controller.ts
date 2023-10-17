@@ -52,8 +52,12 @@ export class AuthController {
   @UseFilters(ErrorsExceptionFilter)
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
-  async signUp(@Res() res: Response, @Body() dto: SignUpDto) {
-    await this.authService.signUp(dto);
+  async signUp(
+    @Session() session: UserSession,
+    @Res() res: Response,
+    @Body() dto: SignUpDto,
+  ) {
+    await this.authService.signUp(session, dto);
     return res.redirect('/');
   }
 
