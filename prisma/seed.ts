@@ -12,7 +12,7 @@ async function main() {
       last_name: 'User',
       password: '$2a$12$KfR9eNC9fxFBviwsjWffaOeuGNw3QJL6ubqg9KfP9gJw/JMMAMf8O',
       profile_pic_url:
-        'https://soccerpointeclaire.com/wp-content/uploads/2021/06/default-profile-pic-e1513291410505.jpg',
+        'https://res.cloudinary.com/dj6rvkhvo/image/upload/v1697499455/avatars/1/h1hhribuj7xiffrndplr.jpg',
     },
   });
 
@@ -25,7 +25,7 @@ async function main() {
       last_name: 'Zhu',
       password: '$2a$12$KfR9eNC9fxFBviwsjWffaOeuGNw3QJL6ubqg9KfP9gJw/JMMAMf8O',
       profile_pic_url:
-        'https://i1.sndcdn.com/avatars-000289303766-rx3hqe-t500x500.jpg',
+        'https://res.cloudinary.com/dj6rvkhvo/image/upload/v1697499467/avatars/2/zeutw7y3ycd4h7c8a8eu.jpg',
     },
   });
 
@@ -39,7 +39,7 @@ async function main() {
       last_name: 'Jand',
       password: '$2a$12$KfR9eNC9fxFBviwsjWffaOeuGNw3QJL6ubqg9KfP9gJw/JMMAMf8O',
       profile_pic_url:
-        'https://e-cdn-images.dzcdn.net/images/cover/0deaf901c342a234d16ab55d65b44b81/264x264-000000-80-0-0.jpg',
+        'https://res.cloudinary.com/dj6rvkhvo/image/upload/v1697499479/avatars/3/l3xnzzi2hqww2ulfiblq.jpg',
     },
   });
 
