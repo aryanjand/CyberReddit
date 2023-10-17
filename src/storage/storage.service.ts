@@ -14,10 +14,11 @@ export class StorageService {
     const fileId = Util.generateId();
     const buf = file.buffer.toString('base64');
     const response = await this.cloudinary.uploadFile(buf, fileId, id);
-    await this.prisma.user.update({
+    const user = await this.prisma.user.update({
       where: { id },
       data: { profile_pic_url: response.secure_url },
     });
-    return;
+    delete user.password;
+    return user;
   }
 }
