@@ -1,6 +1,12 @@
 <%- include("templates/header", { logout: false }) %>
+<style>
+  #error {
+    color: red;
+  }
+</style>
 <div class="container">
   <div class="d-flex flex-column align-items-center">
+    <h1 class="cyberpunk-font">Welcome to Cyber-ReadiT</h1>
     <h2 class="cyberpunk-font">Sign In</h2>
     <form action="/signin" method="post">
       <div class="cyber-input mb-3">
