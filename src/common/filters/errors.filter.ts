@@ -13,16 +13,9 @@ export class ErrorsExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-
     const route: RouteTree = request.route;
 
     response.status(exception.getStatus());
-
-    if (exception.getResponse()['message'] === 'Invalid credentials') {
-      return response.render(route.path.split('/')[1], {
-        errors: [exception.getResponse()['message']],
-      });
-    }
 
     return response.render(route.path.split('/')[1], {
       errors: exception.getResponse()['message'],
