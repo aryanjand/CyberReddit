@@ -1,5 +1,5 @@
-<%- include("templates/header", { logout: true }) %> <%
-include("add-profile-pic-modal") %>
+<%- include("templates/header", { logout: true }) %> 
+<%- include("add-profile-pic-modal") %>
 <style>
   img {
     max-width: 100%;
@@ -43,8 +43,8 @@ include("add-profile-pic-modal") %>
   <% } %>
 </div>
 <script nonce="<%= nonce %>">
-  $(document).ready(function () {
-    $('#create-content-modal').on('shown.bs.modal', function () {
+  $(document).ready(function (event) {
+    $('.#create-content-modal').on('shown.bs.modal', function (e) {
       $('#trigger-modal').trigger('focus');
     });
   });
