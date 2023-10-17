@@ -1,6 +1,10 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-export class AuthException extends HttpException {
+/**
+ * Constructs the HttpException with the same interface
+ * as the class-validator error response.
+ */
+export class ValidationException extends HttpException {
   constructor(
     message: string,
     statusCode: HttpStatus = HttpStatus.BAD_REQUEST,

@@ -2,9 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { Response } from 'express';
-import { UserSession } from '../common';
+import { UserSession, ValidationException } from '../common';
 import { PrismaService } from '../prisma/prisma.service';
-import { AuthException } from './auth-exception';
 import { SignInDto, SignUpDto } from './dto';
 
 @Injectable()
@@ -20,12 +19,18 @@ export class AuthService {
       where: { email: dto.email },
     });
     if (!user) {
-      throw new AuthException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      throw new ValidationException(
+        'Invalid credentials',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     const isValid = bcrypt.compareSync(dto.password, user.password);
     if (!isValid) {
-      throw new AuthException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      throw new ValidationException(
+        'Invalid credentials',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
 
     delete user.password;
@@ -38,7 +43,7 @@ export class AuthService {
 
   async signUp(dto: SignUpDto) {
     if (dto.password !== dto.confirmPassword) {
-      throw new AuthException('Passwords do not match');
+      throw new ValidationException('Passwords do not match');
     }
 
     try {
@@ -53,9 +58,9 @@ export class AuthService {
       });
     } catch (err) {
       if (err.code === 'P2002') {
-        throw new AuthException('Credentials taken');
+        throw new ValidationException('Credentials taken');
       }
-      throw new AuthException('Something went wrong');
+      throw new ValidationException('Something went wrong');
     }
   }
 
