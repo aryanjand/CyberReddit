@@ -13,11 +13,15 @@ import {
 } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { Response } from 'express';
-import { AuthGuard, SessionExceptionFilter, UserSession } from '../common';
+import {
+  AuthGuard,
+  ErrorsExceptionFilter,
+  SessionExceptionFilter,
+  UserSession,
+} from '../common';
 import { User as UserDecorator } from './auth.decorator';
 import { AuthService } from './auth.service';
 import { SignInDto, SignUpDto } from './dto';
-import { AuthExceptionFilter } from './filters/';
 
 @Controller()
 export class AuthController {
@@ -29,7 +33,7 @@ export class AuthController {
     return { errors: [] };
   }
 
-  @UseFilters(AuthExceptionFilter)
+  @UseFilters(ErrorsExceptionFilter)
   @HttpCode(HttpStatus.OK)
   @Post('signin')
   async signIn(
@@ -47,7 +51,7 @@ export class AuthController {
     return { errors: [] };
   }
 
-  @UseFilters(AuthExceptionFilter)
+  @UseFilters(ErrorsExceptionFilter)
   @HttpCode(HttpStatus.CREATED)
   @Post('signup')
   async signUp(@Res() res: Response, @Body() dto: SignUpDto) {
@@ -67,6 +71,6 @@ export class AuthController {
   @Render('profile')
   @Get('profile')
   profile(@UserDecorator() user: User) {
-    return { user: user };
+    return { user: user, errors: [] };
   }
 }

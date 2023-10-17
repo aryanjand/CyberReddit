@@ -8,7 +8,7 @@ import { RouteTree } from '@nestjs/core';
 import { Request, Response } from 'express';
 
 @Catch(HttpException)
-export class AuthExceptionFilter implements ExceptionFilter {
+export class ErrorsExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
