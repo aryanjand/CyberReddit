@@ -1,8 +1,39 @@
 <%- include("templates/header", { logout: true }) %>
+<%- include("add-profile-pic-modal") %>
+<style>
+  img {
+      width: 33%;
+      object-fit: contain;
+    }
+  #error {
+    color: red; 
+  }
+</style>
 <div class="nes-container with-title is-centered">
   <p class="title">Profile</p>
   <div>Email: <%= user.email %></div>
   <div>First Name: <%= user.first_name %></div>
   <div>Last Name: <%= user.last_name %></div>
   <img src="<%= user.profile_pic_url %>" />
+  <button
+    id="trigger-modal"
+    class="nes-btn is-secondary"
+    data-toggle="modal"
+    data-target="#create-content-modal"
+  >
+    Change Profile Picture
+  </button>
+  <% if (errors) { %>
+    <ul id=error style="list-style: none; padding: 0;">
+        <li><%= errors %></li>
+    </ul>
+  <% } %>
+</div>
+<script>
+$(document).ready(function () {
+  $('#create-content-modal').on('shown.bs.modal', function () {
+    $('#trigger-modal').trigger('focus');
+  });
+});
+</script>
 <%- include("templates/footer") %>
