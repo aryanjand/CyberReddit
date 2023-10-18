@@ -11,7 +11,7 @@ export class StorageService {
   ) {}
 
   async uploadAvatar(id: number, file: Express.Multer.File) {
-    const fileId = Util.generateId();
+    const fileId = Util.generateId(20);
     const buf = file.buffer.toString('base64');
     const response = await this.cloudinary.uploadFile(buf, fileId, id);
     const user = await this.prisma.user.update({
