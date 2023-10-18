@@ -1,4 +1,3 @@
-import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
@@ -17,7 +16,6 @@ import { StorageModule } from './storage/storage.module';
       isGlobal: true,
       envFilePath: join(cwd(), '.env'),
     }),
-    HttpModule,
     PrismaModule,
     HealthModule,
     AuthModule,
