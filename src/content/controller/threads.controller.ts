@@ -25,19 +25,21 @@ export class ThreadsController {
 
   // Get all threads
   @HttpCode(HttpStatus.OK)
+  @Render('threads')
   @Get('')
   async findAll(@Res() res: Response): Promise<any> {
     const threads = await this.threadsService.findAllThreads();
     console.log('Threads ', threads[0].thread);
-    return res.render('threads', { threads: threads });
+    return { threads: threads };
   }
 
   // Get a specific post by ID
   @HttpCode(HttpStatus.OK)
+  @Render('threads-page')
   @Get(':id')
   async findOne(@Res() res: Response, @Param('id') id: number) {
     const thread = await this.threadsService.findThread(id);
-    return res.render('threads-page', { thread: thread });
+    return { thread: thread };
   }
 
   @UseGuards(AuthGuard)
@@ -46,7 +48,7 @@ export class ThreadsController {
   @Get('/my-threads')
   async findMyThreads(@Res() res: Response, @Session() session: UserSession) {
     const threads = await this.threadsService.findMyThreads(session.user.id);
-    return res.render('threads', { threads: threads });
+    return { threads: threads };
   }
   // Create a new post
   @UseGuards(AuthGuard)
