@@ -11,8 +11,8 @@ export class CommentsService {
       const contentResult = await this.prisma.content.create({
         data: {
           content_description: dto.content_description,
-          owner_user_id: dto.user_id,
-          content_parent_id: dto.content_id,
+          owner_user_id: dto.owner_user_id,
+          content_parent_id: dto.content_parent_id,
         },
       });
       await this.prisma.comment.create({

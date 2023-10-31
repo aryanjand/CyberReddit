@@ -4,11 +4,11 @@ export class CommentDto {}
 
 export class CreateCommentDto {
   @IsNumber()
-  content_id: number;
+  content_parent_id: number;
 
   @IsString()
   content_description: string;
 
   @IsNumber()
-  user_id: number;
+  owner_user_id: number;
 }

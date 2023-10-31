@@ -10,10 +10,12 @@ import {
 } from '@nestjs/common';
 import { AuthGuard, Public } from 'src/common';
 import { CreateCommentDto } from '../dto';
+import { CommentsService } from '../service/comments.service';
 
 @UseGuards(AuthGuard)
 @Controller('comments')
 export class CommentsController {
+  constructor(private service: CommentsService) {}
   // Get all comments
   @Public()
   @Get()
@@ -30,8 +32,8 @@ export class CommentsController {
 
   // Create a new comment
   @Post()
-  create(@Body() dto: CreateCommentDto): string {
-    return 'Create a new comment';
+  create(@Body() dto: CreateCommentDto) {
+    return this.service.create(dto);
   }
 
   // Update a comment by ID
