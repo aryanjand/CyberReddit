@@ -2,7 +2,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Create Content</h5>
+        <h5 class="modal-title">Create Thread</h5>
         <button
           type="button"
           class="close"
@@ -13,14 +13,29 @@
         </button>
       </div>
       <div class="modal-body">
-        <form
-          ref="uploadForm"
-          id="content-form"
-          method="POST"
-          action="/content/my-content"
-          encType="multipart/form-data"
-        ></form>
+        <form method="post" action="/threads">
+          <div class="form-group">
+            <input
+              type="text"
+              name="title"
+              class="form-control"
+              placeholder="Thread Title"
+              required="true"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              name="content_description"
+              class="form-control"
+              placeholder="Thread Description"
+              required="true"
+            />
+          </div>
+          <input type="submit" value="Save" class="btn btn-primary" />
+        </form>
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Close
@@ -29,4 +44,3 @@
     </div>
   </div>
 </div>
-<script></script>

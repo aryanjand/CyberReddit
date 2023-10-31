@@ -10,13 +10,13 @@ include("./forms/create-thread-modal") %>
       data-toggle="modal"
       data-target="#create-thread-modal"
     >
-      Create Content
+      Create Thread
     </button>
   </div>
   <div class="container">
     <div class="row">
       <% threads.forEach(function(thread) { %>
-      <div class="col-md-4">
+      <div class="col-md-4 mb-3">
         <div class="cyber-tile bg-red p-2 h-100">
           <h4 class="cyber-h"><%= thread.thread[0].title %></h4>
           <p><%= thread.content_description %></p>
