@@ -9,47 +9,70 @@ import {
   Param,
   Body,
   Render,
-  Res,
+  Response as Res,
+  UseGuards,
+  HttpCode,
+  HttpStatus,
+  Session,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { ThreadsService } from '../service/threads.service';
+import { AuthGuard, UserSession } from '../../common';
 
 @Controller('threads')
 export class ThreadsController {
   constructor(private threadsService: ThreadsService) {}
 
   // Get all threads
+  @HttpCode(HttpStatus.OK)
   @Get('')
-  @Render('threads')
-  findAll(): any {
-    return { errors: [] };
+  async findAll(@Res() res: Response): Promise<any> {
+    const threads = await this.threadsService.findAllThreads();
+    console.log('Threads ', threads[0].thread);
+    return res.render('threads', { threads: threads });
   }
 
   // Get a specific post by ID
-  @Get('/:id')
-  @Render('threads-page')
-  findOne(@Param('id') id: string): string {
-    return `Get post with ID ${id}`;
+  @HttpCode(HttpStatus.OK)
+  @Get(':id')
+  async findOne(@Res() res: Response, @Param('id') id: number) {
+    const thread = await this.threadsService.findThread(id);
+    return res.render('threads-page', { thread: thread });
   }
 
-  // Create a new post
-  @Post('')
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.OK)
   @Render('threads')
-  create(@Res() res: Response, @Body() postData: any) {
-
-
-    
-
+  @Get('/my-threads')
+  async findMyThreads(@Res() res: Response, @Session() session: UserSession) {
+    const threads = await this.threadsService.findMyThreads(session.user.id);
+    return res.render('threads', { threads: threads });
+  }
+  // Create a new post
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Render('threads')
+  @Post('')
+  async create(@Res() res: Response, @Body() postData: any) {
+    await this.threadsService.createThread(postData);
+    return res.redirect('/threads');
   }
 
   // Update a post by ID
-  @Put('content/threads/:id')
-  update(@Param('id') id: string, @Body() postData: any): string {
-    return `Update post with ID ${id}`;
+  @Put(':id')
+  async update(
+    @Res() res: Response,
+    @Param('id') id: string,
+    @Body() postData: any,
+  ) {
+    await this.threadsService.patchThread(id, postData);
+    return res.redirect('/threads');
   }
 
   // Delete a post by ID
-  @Delete('content/threads/:id')
-  remove(@Param('id') id: string): string {
-    return `Delete post with ID ${id}`;
-  }
+  // @Delete(':id')
+  // async remove(@Param('id') id: number): Promise<string> {
+  //   await this.threadsService.deleteThread(id);
+  //   return `Delete post with ID ${id}`;
+  // }
 }

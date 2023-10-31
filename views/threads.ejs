@@ -1,7 +1,35 @@
-<%- include("templates/header", { logout: false }) %>
-
+<%- include("templates/header", { logout: true }) %>
+<!-- {{ include("./forms/create-thread-modal") }} -->
 <div class="container">
-  <p></p>
+  <div class="d-flex justify-content-between gap-5 mb-2">
+    <h3 class="cyber-h">Threads</h3>
+    <button
+      class="cyber-button-small"
+      id="trigger-modal"
+      data-toggle="modal"
+      data-target="#create-thread-modal"
+    >
+      Create Content
+    </button>
+  </div>
+  <div class="container">
+    <div class="row">
+      <% threads.forEach(function(thread) { %>
+      <div class="col-md-4">
+        <div class="cyber-tile bg-red p-2 h-100">
+          <h4 class="cyber-h"><%= thread.thread[0].title %></h4>
+          <p><%= thread.content_description %></p>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+  </div>
 </div>
-
+<script>
+  $(document).ready(function () {
+    $('#create-thread-modal').on('shown.bs.modal', function () {
+      $('#trigger-modal').trigger('focus');
+    });
+  });
+</script>
 <%- include("templates/footer") %>
