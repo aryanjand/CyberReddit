@@ -24,30 +24,29 @@ export class ThreadsController {
   constructor(private threadsService: ThreadsService) {}
 
   // Get all threads
-  @Render('threads')
   @HttpCode(HttpStatus.OK)
   @Get('')
-  async findAll(): Promise<any> {
+  async findAll(@Res() res: Response): Promise<any> {
     const threads = await this.threadsService.findAllThreads();
-    return { threads };
+    console.log('Threads ', threads[0].thread);
+    return res.render('threads', { threads: threads });
   }
 
   // Get a specific post by ID
   @HttpCode(HttpStatus.OK)
-  @Render('threads-page')
   @Get(':id')
-  async findOne(@Param('id') id: number) {
+  async findOne(@Res() res: Response, @Param('id') id: number) {
     const thread = await this.threadsService.findThread(id);
-    return { thread };
+    return res.render('threads-page', { thread: thread });
   }
 
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   @Render('threads')
   @Get('/my-threads')
-  async findMyThreads(@Session() session: UserSession) {
+  async findMyThreads(@Res() res: Response, @Session() session: UserSession) {
     const threads = await this.threadsService.findMyThreads(session.user.id);
-    return { threads };
+    return res.render('threads', { threads: threads });
   }
   // Create a new post
   @UseGuards(AuthGuard)
@@ -71,9 +70,9 @@ export class ThreadsController {
   }
 
   // Delete a post by ID
-  @Delete(':id')
-  async remove(@Param('id') id: number): Promise<string> {
-    await this.threadsService.deleteThread(id);
-    return `Delete post with ID ${id}`;
-  }
+  // @Delete(':id')
+  // async remove(@Param('id') id: number): Promise<string> {
+  //   await this.threadsService.deleteThread(id);
+  //   return `Delete post with ID ${id}`;
+  // }
 }
