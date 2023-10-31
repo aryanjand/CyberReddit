@@ -14,10 +14,12 @@ import {
   HttpCode,
   HttpStatus,
   Session,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ThreadsService } from '../service/threads.service';
 import { AuthGuard, UserSession } from '../../common';
+import { CreateThreadDto } from '../dto/createThread.dto';
 
 @Controller('threads')
 export class ThreadsController {
@@ -27,7 +29,7 @@ export class ThreadsController {
   @HttpCode(HttpStatus.OK)
   @Render('threads')
   @Get('')
-  async findAll(@Res() res: Response): Promise<any> {
+  async findAll(): Promise<any> {
     const threads = await this.threadsService.findAllThreads();
     console.log('Threads ', threads[0].thread);
     return { threads: threads };
@@ -37,7 +39,7 @@ export class ThreadsController {
   @HttpCode(HttpStatus.OK)
   @Render('threads-page')
   @Get(':id')
-  async findOne(@Res() res: Response, @Param('id') id: number) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     const thread = await this.threadsService.findThread(id);
     return { thread: thread };
   }
@@ -46,7 +48,7 @@ export class ThreadsController {
   @HttpCode(HttpStatus.OK)
   @Render('threads')
   @Get('/my-threads')
-  async findMyThreads(@Res() res: Response, @Session() session: UserSession) {
+  async findMyThreads(@Session() session: UserSession) {
     const threads = await this.threadsService.findMyThreads(session.user.id);
     return { threads: threads };
   }
@@ -55,8 +57,14 @@ export class ThreadsController {
   @HttpCode(HttpStatus.OK)
   @Render('threads')
   @Post('')
-  async create(@Res() res: Response, @Body() postData: any) {
-    await this.threadsService.createThread(postData);
+  async create(
+    @Session() session: UserSession,
+    @Res() res: Response,
+    @Body() dto: CreateThreadDto,
+  ) {
+    console.log('line 60: post data ', dto, session.user);
+
+    await this.threadsService.createThread(dto, session.user.id);
     return res.redirect('/threads');
   }
 
@@ -64,10 +72,10 @@ export class ThreadsController {
   @Put(':id')
   async update(
     @Res() res: Response,
-    @Param('id') id: string,
-    @Body() postData: any,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() putData: CreateThreadDto,
   ) {
-    await this.threadsService.patchThread(id, postData);
+    await this.threadsService.patchThread(putData, id);
     return res.redirect('/threads');
   }
 
