@@ -39,6 +39,9 @@ export class ThreadsService {
       where: { id },
       include: {
         thread: true,
+        _count: {
+          select: { like: true },
+        },
       },
     });
     if (!content_threads) {
@@ -69,6 +72,19 @@ export class ThreadsService {
     }
     return;
   }
+  // updating just the view count
+  async patchThreadView(id: number) {
+    const content = await this.prisma.content.update({
+      where: { id },
+      data: { views: { increment: 1 } },
+    });
+
+    if (!content) {
+      throw new ValidationException('No Content', HttpStatus.NOT_FOUND);
+    }
+    return;
+  }
+
   // Should we make these transactions
   async patchThread(putData: CreateThreadDto, id: number) {
     const content = await this.prisma.content.update({
