@@ -29,10 +29,9 @@ export class ThreadsController {
   @HttpCode(HttpStatus.OK)
   @Render('threads')
   @Get('')
-  async findAll(): Promise<any> {
+  async findAll(@Session() session: UserSession): Promise<any> {
     const threads = await this.threadsService.findAllThreads();
-    console.log('Threads ', threads[0].thread);
-    return { threads: threads };
+    return { threads: threads, authenticated: session.authenticated };
   }
 
   // Get threads by user id
@@ -42,16 +41,21 @@ export class ThreadsController {
   @Get('my-threads')
   async findMyThreads(@Session() session: UserSession): Promise<any> {
     const threads = await this.threadsService.findMyThreads(session.user.id);
-    return { threads: threads };
+    return { threads: threads, authenticated: true };
   }
 
   // Get a specific post by ID
   @HttpCode(HttpStatus.OK)
-  @Render('threads-page')
+  @Render('thread-page')
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(
+    @Session() session: UserSession,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    await this.threadsService.patchThreadView(id);
     const thread = await this.threadsService.findThread(id);
-    return { thread: thread };
+    console.log('Thread from DB ', thread);
+    return { thread: thread, authenticated: session.authenticated };
   }
 
   // Create a new post

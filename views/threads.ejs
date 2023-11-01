@@ -1,9 +1,10 @@
-<%- include("templates/header", { logout: true }) %> <%-
+<% if (authenticated) { %> <%- include("templates/header", { logout: true }) %>
+<% } else { %> <%- include("templates/header", { logout: false }) %> <% } %> <%
 include("./forms/create-thread-modal") %>
 <div class="container">
   <div class="d-flex justify-content-between gap-5 mb-2">
     <h3 class="cyber-h">Threads</h3>
-
+    <% if (authenticated) { %>
     <button
       class="cyber-button-small"
       id="trigger-modal"
@@ -12,6 +13,7 @@ include("./forms/create-thread-modal") %>
     >
       Create Thread
     </button>
+    <% } %>
   </div>
   <div class="container">
     <div class="row">
