@@ -35,12 +35,16 @@ export class ThreadsService {
   }
 
   async findThread(id: number) {
-    const content_threads = await this.prisma.content.findUnique({
+    const content_threads = await this.prisma.thread.findUnique({
       where: { id },
       include: {
-        thread: true,
-        _count: {
-          select: { like: true },
+        content: {
+          select: {
+            views: true,
+            _count: {
+              select: { like: true },
+            },
+          },
         },
       },
     });
@@ -74,9 +78,11 @@ export class ThreadsService {
   }
   // updating just the view count
   async patchThreadView(id: number) {
-    const content = await this.prisma.content.update({
+    const content = await this.prisma.thread.update({
       where: { id },
-      data: { views: { increment: 1 } },
+      data: {
+        content: { update: { views: { increment: 1 } } },
+      },
     });
 
     if (!content) {

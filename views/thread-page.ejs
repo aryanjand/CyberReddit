@@ -5,14 +5,14 @@
   <div
     class="cyber-tile bg-red p-2 h-100 d-flex flex-column justify-content-between"
   >
-    <h4 class="cyber-h"><%= thread.thread[0].title %></h4>
+    <h4 class="cyber-h"><%= thread.title %></h4>
     <p><%= thread.content_description %></p>
     <div class="d-flex">
       <div class="mr-3">
-        <p>Views: <%= thread.views %></p>
+        <p>Views: <%= thread.content.views %></p>
       </div>
       <div>
-        <p>Likes: <%= thread._count.like %></p>
+        <p>Likes: <%= thread.content._count.like %></p>
       </div>
     </div>
   </div>
