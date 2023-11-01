@@ -1,35 +1,20 @@
-<%- include("templates/header", { logout: false }) %>
-<style>
-  #error {
-    color: red;
-  }
-</style>
-<div class="container">
-  <div class="d-flex flex-column align-items-center">
-    <h2 class="cyberpunk-font">Sign In</h2>
-    <form action="/signin" method="post">
-      <div class="cyber-input mb-3">
-        <input name="email" type="text" placeholder="Email" />
+<% if (authenticated) { %> <%- include("templates/header", { logout: true }) %>
+<% } else { %> <%- include("templates/header", { logout: false }) %> <% } %>
+
+<div class="d-flex justify-content-center align-items-center">
+  <div
+    class="cyber-tile bg-red p-2 h-100 d-flex flex-column justify-content-between"
+  >
+    <h4 class="cyber-h"><%= thread.thread[0].title %></h4>
+    <p><%= thread.content_description %></p>
+    <div class="d-flex">
+      <div class="mr-3">
+        <p>Views: <%= thread.views %></p>
       </div>
-      <div class="cyber-input mb-3">
-        <input name="password" type="password" placeholder="Password" />
+      <div>
+        <p>Likes: <%= thread._count.like %></p>
       </div>
-      <button class="cyber-button bg-purple fg-white">
-        Submit
-        <span class="glitchtext">Submit</span>
-        <span class="tag">R25</span>
-      </button>
-    </form>
-    <% if (errors) { %>
-    <ul id="error" style="list-style: none; padding: 0">
-      <% for (let i = 0; i < errors.length; i++) { %>
-      <li><%= errors[i] %></li>
-      <% } %>
-    </ul>
-    <% } %>
-    <span class="oxanium-font">
-      Don't have an account? <a href="/signup">Sign-Up</a>
-    </span>
+    </div>
   </div>
 </div>
 <%- include("templates/footer") %>
