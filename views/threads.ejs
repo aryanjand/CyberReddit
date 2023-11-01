@@ -1,9 +1,9 @@
 <%- include("templates/header", { logout: true }) %> <%-
 include("./forms/create-thread-modal") %>
-
 <div class="container">
   <div class="d-flex justify-content-between gap-5 mb-2">
     <h3 class="cyber-h">Threads</h3>
+
     <button
       class="cyber-button-small"
       id="trigger-modal"
@@ -17,9 +17,15 @@ include("./forms/create-thread-modal") %>
     <div class="row">
       <% threads.forEach(function(thread) { %>
       <div class="col-md-4 mb-3">
-        <div class="cyber-tile bg-red p-2 h-100">
+        <div
+          class="cyber-tile bg-red p-2 h-100 d-flex flex-column justify-content-between"
+        >
           <h4 class="cyber-h"><%= thread.thread[0].title %></h4>
           <p><%= thread.content_description %></p>
+          <!-- Make it to the right  -->
+          <div class="text-end">
+            <a href="/threads/<%= thread.id %>"><button>View &rarr;</button></a>
+          </div>
         </div>
       </div>
       <% }); %>
