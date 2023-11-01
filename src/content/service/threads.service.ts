@@ -5,6 +5,7 @@ import { Response } from 'express';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserSession, ValidationException } from '../../common';
 import { User, Thread, Content } from '@prisma/client';
+import { CreateThreadDto } from '../dto/createThread.dto';
 
 @Injectable()
 export class ThreadsService {
@@ -47,12 +48,11 @@ export class ThreadsService {
   }
 
   // Should we make these transactions
-  async createThread(postData: any) {
+  async createThread(postData: CreateThreadDto, userId: number) {
     const content = await this.prisma.content.create({
       data: {
         content_description: postData.content_description,
-        owner_user_id: postData.owner_user_id,
-        content_parent_id: null,
+        owner_user_id: userId,
       },
     });
     if (!content) {
@@ -70,7 +70,7 @@ export class ThreadsService {
     return;
   }
   // Should we make these transactions
-  async patchThread(putData: any, id: number) {
+  async patchThread(putData: CreateThreadDto, id: number) {
     const content = await this.prisma.content.update({
       where: { id },
       data: { content_description: putData.content_description },
