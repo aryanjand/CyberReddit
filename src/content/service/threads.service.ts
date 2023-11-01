@@ -12,9 +12,9 @@ export class ThreadsService {
   constructor(private prisma: PrismaService, private config: ConfigService) {}
 
   async findAllThreads() {
-    const content_threads = await this.prisma.content.findMany({
+    const content_threads = await this.prisma.thread.findMany({
       include: {
-        thread: true,
+        content: true,
       },
     });
     if (!content_threads) {

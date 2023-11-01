@@ -31,7 +31,6 @@ export class ThreadsController {
   @Get('')
   async findAll(): Promise<any> {
     const threads = await this.threadsService.findAllThreads();
-    console.log('Threads ', threads[0].thread);
     return { threads: threads };
   }
 
