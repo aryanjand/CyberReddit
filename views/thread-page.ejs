@@ -6,6 +6,7 @@
     class="cyber-tile bg-red p-2 h-100 d-flex flex-column justify-content-between"
   >
     <h4 class="cyber-h"><%= thread.title %></h4>
+    <p><%= thread.content.owner_user.email %></p>
     <p><%= thread.content.content_description %></p>
     <div class="d-flex">
       <div class="mr-3">
@@ -15,6 +16,16 @@
         <p>Likes: <%= thread.content._count.like %></p>
       </div>
     </div>
+    <% for (let i = 0; i < thread.content.child_contents.length; i++) { %>
+      <div> 
+        <div> 
+          <%= thread.content.child_contents[i].owner_user.email %>
+        </div> 
+        <div>
+        <%= thread.content.child_contents[i].content_description %> 
+        </div>
+      </div>
+    <% } %>
   </div>
 </div>
 <%- include("templates/footer") %>

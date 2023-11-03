@@ -1,15 +1,15 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
-import { Response } from 'express';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { ValidationException } from '../../common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { UserSession, ValidationException } from '../../common';
-import { User, Thread, Content } from '@prisma/client';
 import { CreateThreadDto } from '../dto/createThread.dto';
+import { CommentsService } from './comments.service';
 
 @Injectable()
 export class ThreadsService {
-  constructor(private prisma: PrismaService, private config: ConfigService) {}
+  constructor(
+    private prisma: PrismaService,
+    private comment: CommentsService,
+  ) {}
 
   async findAllThreads() {
     const content_threads = await this.prisma.thread.findMany({
@@ -40,8 +40,29 @@ export class ThreadsService {
       include: {
         content: {
           select: {
+            owner_user: {
+              select: {
+                first_name: true,
+                last_name: true,
+                email: true,
+              },
+            },
             views: true,
             content_description: true,
+            child_contents: {
+              select: {
+                created_at: true,
+                updated_at: true,
+                content_description: true,
+                owner_user: {
+                  select: {
+                    first_name: true,
+                    last_name: true,
+                    email: true,
+                  },
+                },
+              },
+            },
             _count: {
               select: { like: true },
             },

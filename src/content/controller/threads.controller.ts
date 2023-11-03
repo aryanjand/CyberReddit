@@ -54,11 +54,9 @@ export class ThreadsController {
   ) {
     await this.threadsService.patchThreadView(id);
     const thread = await this.threadsService.findThread(id);
-    console.log('Thread from DB ', thread);
+    console.dir(thread, { depth: null });
     return { thread: thread, authenticated: session.authenticated };
   }
-
-  // Create a new post
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   @Render('threads')
