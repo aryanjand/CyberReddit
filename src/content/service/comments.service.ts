@@ -24,4 +24,23 @@ export class CommentsService {
       console.log(err);
     }
   }
+
+  async findAllByThreadId(threadId: number) {
+    try {
+      const comments = await this.prisma.thread.findUnique({
+        where: { id: threadId },
+        include: {
+          content: {
+            select: {
+              child_contents: true,
+            },
+          },
+        },
+      });
+      console.dir(comments, { depth: null });
+      return comments;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 }
