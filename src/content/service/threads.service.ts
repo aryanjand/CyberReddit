@@ -41,6 +41,7 @@ export class ThreadsService {
         content: {
           select: {
             views: true,
+            content_description: true,
             _count: {
               select: { like: true },
             },
