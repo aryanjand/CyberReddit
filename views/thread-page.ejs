@@ -16,8 +16,20 @@
         <p>Likes: <%= thread.content._count.like %></p>
       </div>
     </div>
+
+    <form action="/comments" method="POST">
+      <input type="hidden" name="content_parent_id" value=<%= thread.id %> />
+      <div class="cyber-input">
+        <input
+          name="content_description"
+          required=true,
+          type="textarea"
+          placeholder="Comment" />
+      </div>
+      <button class="cyber-button-small">Submit</button>
+    </form>
     <% for (let i = 0; i < thread.content.child_contents.length; i++) { %>
-      <div> 
+      <div class="cyber-tile"> 
         <div> 
           <%= thread.content.child_contents[i].owner_user.email %>
         </div> 

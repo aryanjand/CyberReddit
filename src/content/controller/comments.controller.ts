@@ -4,11 +4,13 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
+  Session,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard, Public } from 'src/common';
+import { AuthGuard, Public, UserSession } from 'src/common';
 import { CreateCommentDto } from '../dto';
 import { CommentsService } from '../service/comments.service';
 
@@ -30,10 +32,9 @@ export class CommentsController {
     return `Get comment with ID ${id}`;
   }
 
-  // Create a new comment
   @Post()
-  create(@Body() dto: CreateCommentDto) {
-    return this.service.create(dto);
+  create(@Session() session: UserSession, @Body() dto: CreateCommentDto) {
+    return this.service.create(session, dto);
   }
 
   // Update a comment by ID

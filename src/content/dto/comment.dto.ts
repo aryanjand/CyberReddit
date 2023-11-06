@@ -1,14 +1,13 @@
-import { IsNumber, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsInt, IsString } from 'class-validator';
 
 export class CommentDto {}
 
 export class CreateCommentDto {
-  @IsNumber()
+  @IsInt()
+  @Transform(({ value }) => parseInt(value))
   content_parent_id: number;
 
   @IsString()
   content_description: string;
-
-  @IsNumber()
-  owner_user_id: number;
 }

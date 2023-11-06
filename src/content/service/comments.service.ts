@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { UserSession } from '../../common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateCommentDto } from '../dto';
 
@@ -6,12 +7,12 @@ import { CreateCommentDto } from '../dto';
 export class CommentsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(dto: CreateCommentDto) {
+  async create(session: UserSession, dto: CreateCommentDto) {
     try {
       const contentResult = await this.prisma.content.create({
         data: {
           content_description: dto.content_description,
-          owner_user_id: dto.owner_user_id,
+          owner_user_id: session.user.id,
           content_parent_id: dto.content_parent_id,
         },
       });
