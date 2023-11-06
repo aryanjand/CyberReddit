@@ -61,7 +61,7 @@ async function bootstrap() {
       resave: false,
       cookie: {
         secure: process.env.NODE_ENV === 'production' ? true : false,
-        maxAge: 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24,
       },
       store: MongoStore.create({
         mongoUrl: process.env.MONGO_URL,
