@@ -50,8 +50,11 @@ export class CommentsService {
       ) {
         throw new UnauthorizedException('Comment does not belong to user');
       }
-      await this.prisma.content.delete({
+      await this.prisma.content.update({
         where: { id: contentId },
+        data: {
+          content_description: '[removed]',
+        },
       });
     } catch (err) {
       console.log(err);
