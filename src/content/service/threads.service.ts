@@ -63,6 +63,7 @@ export class ThreadsService {
                     email: true,
                   },
                 },
+                child_contents: true,
               },
             },
             _count: {

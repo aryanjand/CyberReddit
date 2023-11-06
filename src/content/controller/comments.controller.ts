@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
   Param,
@@ -20,6 +21,11 @@ import { CommentsService } from '../service/comments.service';
 @Controller('comments')
 export class CommentsController {
   constructor(private service: CommentsService) {}
+
+  @Get(':id')
+  findAllByContentParentId(@Param('id', ParseIntPipe) id: number) {
+    return this.service.findAllByContentParentId(id);
+  }
 
   @Redirect()
   @Post()
