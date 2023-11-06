@@ -11,6 +11,27 @@ import { CreateCommentDto } from '../dto';
 export class CommentsService {
   constructor(private prisma: PrismaService) {}
 
+  async findAllByContentParentId(id: number) {
+    try {
+      const contents = await this.prisma.content.findMany({
+        where: { content_parent_id: id },
+        include: {
+          child_contents: true,
+          owner_user: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
+        },
+      });
+      return contents;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+
   async create(session: UserSession, dto: CreateCommentDto) {
     try {
       const contentResult = await this.prisma.content.create({

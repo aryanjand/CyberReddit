@@ -16,7 +16,6 @@
         <p>Likes: <%= thread.content._count.like %></p>
       </div>
     </div>
-
     <form action="/comments" method="POST">
       <input type="hidden" name="thread_id" value=<%= thread.id %> />
       <input type="hidden" name="content_parent_id" value=<%= thread.content_id %> />
@@ -27,7 +26,7 @@
           type="textarea"
           placeholder="Comment" />
       </div>
-      <button class="cyber-button-small">Submit</button>
+      <button>Submit</button>
     </form>
     <% for (let i = 0; i < thread.content.child_contents.length; i++) { %>
       <div class="cyber-tile"> 
@@ -42,7 +41,25 @@
             <%= thread.content.child_contents[i].content_description %>
           <% } %>
         </div>
+        <div>
+          <i id="reply-count-<%= thread.content.child_contents[i].id %>"><%= thread.content.child_contents[i].child_contents.length %> replies to this comment</i>
+          <div style="margin-left: 20px;" id="reply-list-<%= thread.content.child_contents[i].id %>"></div>
+          <p style="cursor: pointer;" class="show-replies" id=<%= thread.content.child_contents[i].id %>>show</p>
+        </div>
           <% if (authenticated) { %> 
+          <form action="/comments" method="POST" style="display:none;" class="reply-comment-form" id=<%= thread.content.child_contents[i].id %>>
+            <input type="hidden" name="thread_id" value=<%= thread.id %> />
+            <input type="hidden" name="content_parent_id" value=<%= thread.content.child_contents[i].id %> />
+            <div class="cyber-input">
+              <input
+                name="content_description"
+                required=true,
+                type="textarea"
+                placeholder="Comment" />
+            </div>
+            <button>Save</button>
+          </form>
+            <button class="reply-comment" id=<%= thread.content.child_contents[i].id %>>Reply</button>
             <% if (
               thread.content.child_contents[i].owner_user.id === user.id ||
               thread.content.owner_user.id === user.id
@@ -84,6 +101,43 @@
           window.location.reload()
       }
     })
+
+    $('.reply-comment').on('click', async (e) => {
+        e.preventDefault();
+        $('.reply-comment-form[id=' + e.target.id + ']').toggle()
+        $(e.target).text($(e.target).text() == 'Reply' ? 'Cancel' : 'Reply');
+    })
+
+    $('.show-replies').on('click', async (e) => {
+        e.preventDefault();
+        $('#reply-count-' + e.target.id).toggle()
+        $('.show-replies[id=' + e.target.id + ']').text($('.show-replies[id=' + e.target.id + ']').text() == 'show' ? 'hide' : 'show');
+        if ($('.show-replies[id=' + e.target.id + ']').text() === 'show') {
+          $('#reply-list-' + e.target.id).empty()
+          return
+        }
+
+        const response = await fetch(`/comments/${e.target.id}`, {
+          headers: {"content-type": "application/json"},
+          method: 'GET'
+        })
+
+        const replies = await response.json()
+
+        for (let i = 0; i < replies.length; i++) {
+          $('#reply-list-' + e.target.id).append(
+          `<div style="margin-top: 10px;">
+            <div>
+              ${replies[i].owner_user.email}
+            </div>
+            <div>
+              ${replies[i].content_description}
+            </div>
+            <i>${replies[i].child_contents.length} replies to this comment</i>
+          </div>`
+          )
+        }
+      })
   })
 </script>
 <%- include("templates/footer") %>
