@@ -9,7 +9,6 @@ import {
   Param,
   Body,
   Render,
-  Response as Res,
   UseGuards,
   HttpCode,
   HttpStatus,
@@ -17,7 +16,6 @@ import {
   ParseIntPipe,
   Redirect,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { ThreadsService } from '../service/threads.service';
 import { AuthGuard, UserSession } from '../../common';
 import { CreateThreadDto } from '../dto/createThread.dto';
