@@ -58,7 +58,7 @@ export class ThreadsController {
     return { thread: thread, authenticated: session.authenticated };
   }
   @UseGuards(AuthGuard)
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @Render('threads')
   @Post('')
   async create(
