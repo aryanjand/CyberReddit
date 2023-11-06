@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
@@ -25,7 +25,7 @@ model User {
   last_name       String    @db.VarChar(50)
   email           String    @unique @db.VarChar(255)
   password        String    @db.VarChar(255)
-  profile_pic_url String    @db.VarChar(150) @default("")
+  profile_pic_url String    @default("") @db.VarChar(150)
   like            Like[]
   content         Content[]
 }
@@ -40,10 +40,10 @@ model Content {
   owner_user_id       Int
   owner_user          User   @relation(fields: [owner_user_id], references: [id], onDelete: Cascade)
 
-  content_parent_id Int?     @unique
+  content_parent_id Int?
   content_parent    Content? @relation("ChildContents", fields: [content_parent_id], references: [id])
+  child_contents    Content[] @relation("ChildContents")
 
-  child_contents Content[] @relation("ChildContents")
   like           Like[]
   thread         Thread[]
   comment        Comment[]
@@ -56,8 +56,6 @@ model Like {
   id         Int      @id @default(autoincrement())
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-
-  last_name String @db.VarChar(50)
 
   user_id    Int
   user       User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
