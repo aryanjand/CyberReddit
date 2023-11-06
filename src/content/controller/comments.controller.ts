@@ -2,15 +2,14 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   Param,
-  ParseIntPipe,
   Post,
   Put,
+  Redirect,
   Session,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard, Public, UserSession } from 'src/common';
+import { AuthGuard, UserSession } from 'src/common';
 import { CreateCommentDto } from '../dto';
 import { CommentsService } from '../service/comments.service';
 
@@ -18,20 +17,8 @@ import { CommentsService } from '../service/comments.service';
 @Controller('comments')
 export class CommentsController {
   constructor(private service: CommentsService) {}
-  // Get all comments
-  @Public()
-  @Get()
-  findAll(): string {
-    return 'Get all comments';
-  }
 
-  // Get a specific comment by ID
-  @Public()
-  @Get(':id')
-  findOne(@Param('id') id: string): string {
-    return `Get comment with ID ${id}`;
-  }
-
+  @Redirect()
   @Post()
   create(@Session() session: UserSession, @Body() dto: CreateCommentDto) {
     return this.service.create(session, dto);

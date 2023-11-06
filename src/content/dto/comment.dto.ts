@@ -8,6 +8,10 @@ export class CreateCommentDto {
   @Transform(({ value }) => parseInt(value))
   content_parent_id: number;
 
+  @IsInt()
+  @Transform(({ value }) => parseInt(value))
+  thread_id: number;
+
   @IsString()
   content_description: string;
 }

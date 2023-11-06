@@ -21,6 +21,7 @@ export class CommentsService {
           content_id: contentResult.id,
         },
       });
+      return { url: `/threads/${dto.thread_id}` };
     } catch (err) {
       console.log(err);
     }
