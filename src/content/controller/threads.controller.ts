@@ -15,6 +15,7 @@ import {
   HttpStatus,
   Session,
   ParseIntPipe,
+  Redirect,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ThreadsService } from '../service/threads.service';
@@ -59,26 +60,21 @@ export class ThreadsController {
   }
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
+  @Redirect('/threads')
   @Render('threads')
-  @Post('')
-  async create(
-    @Session() session: UserSession,
-    @Res() res: Response,
-    @Body() dto: CreateThreadDto,
-  ) {
-    await this.threadsService.createThread(dto, session.user.id);
-    return res.redirect('/threads');
+  @Post()
+  create(@Session() session: UserSession, @Body() dto: CreateThreadDto) {
+    return this.threadsService.createThread(dto, session.user.id);
   }
 
   // Update a post by ID
+  @Redirect('/threads')
   @Put(':id')
-  async update(
-    @Res() res: Response,
+  update(
     @Param('id', ParseIntPipe) id: number,
     @Body() putData: CreateThreadDto,
   ) {
-    await this.threadsService.patchThread(putData, id);
-    return res.redirect('/threads');
+    return this.threadsService.patchThread(putData, id);
   }
 
   // Delete a post by ID
