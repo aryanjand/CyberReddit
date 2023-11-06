@@ -35,10 +35,55 @@
           <%= thread.content.child_contents[i].owner_user.email %>
         </div> 
         <div>
-        <%= thread.content.child_contents[i].content_description %> 
+          <% if (thread.content.child_contents[i].owner_user.id === user.id) { %>
+            <label for="content_description"></label>
+            <textarea id="comment-<%= thread.content.child_contents[i].id %>" name="content_description" required=true><%= thread.content.child_contents[i].content_description %></textarea>
+          <% } else { %>
+            <%= thread.content.child_contents[i].content_description %>
+          <% } %>
         </div>
+          <% if (authenticated) { %> 
+            <% if (
+              thread.content.child_contents[i].owner_user.id === user.id ||
+              thread.content.owner_user.id === user.id
+            ) { %> 
+              <button class="delete-comment" id=<%= thread.content.child_contents[i].id %>>Delete</button>
+          <% } %>
+          <% if ( 
+              thread.content.child_contents[i].owner_user.id === user.id
+              ) { %>
+                <button class="update-comment" id=<%= thread.content.child_contents[i].id %>>Update</button>
+             <% } %>
+        <% } %>
       </div>
     <% } %>
   </div>
 </div>
+<script nonce="<%= nonce %>">
+  $(document).ready(() => {
+    $('.delete-comment').on('click', async (e) => {
+        e.preventDefault();
+        const response = await fetch(`/comments/${e.target.id}`, {
+          headers: {"content-type": "application/json"},
+          method: 'DELETE'
+        })
+        if (response.status === 204) {
+          window.location.reload()
+        }
+    })
+
+    $('.update-comment').on('click', async (e) => {
+      e.preventDefault();
+      const response = await fetch(`/comments/${e.target.id}`, {
+        headers: {"content-type": "application/json"},
+        method: "PATCH",
+        body: JSON.stringify({ content_description: $(`#comment-${e.target.id}`).val() })
+      })
+
+      if (response.status === 200) {
+          window.location.reload()
+      }
+    })
+  })
+</script>
 <%- include("templates/footer") %>

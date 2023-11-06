@@ -54,7 +54,11 @@ export class ThreadsController {
     await this.threadsService.patchThreadView(id);
     const thread = await this.threadsService.findThread(id);
     console.dir(thread, { depth: null });
-    return { thread: thread, authenticated: session.authenticated };
+    return {
+      thread: thread,
+      authenticated: session.authenticated,
+      user: session.user,
+    };
   }
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)

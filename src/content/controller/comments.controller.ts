@@ -2,9 +2,12 @@ import {
   Body,
   Controller,
   Delete,
+  HttpCode,
+  HttpStatus,
   Param,
+  ParseIntPipe,
+  Patch,
   Post,
-  Put,
   Redirect,
   Session,
   UseGuards,
@@ -24,15 +27,22 @@ export class CommentsController {
     return this.service.create(session, dto);
   }
 
-  // Update a comment by ID
-  @Put(':id')
-  update(@Param('id') id: string, @Body() commentData: any): string {
-    return `Update comment with ID ${id}`;
+  @HttpCode(HttpStatus.OK)
+  @Patch(':id')
+  update(
+    @Session() session: UserSession,
+    @Param('id', ParseIntPipe) id: number,
+    @Body('content_description') content: string,
+  ) {
+    return this.service.update(session, id, content);
   }
 
-  // Delete a comment by ID
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  remove(@Param('id') id: string): string {
-    return `Delete comment with ID ${id}`;
+  remove(
+    @Session() session: UserSession,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.service.delete(session, id);
   }
 }

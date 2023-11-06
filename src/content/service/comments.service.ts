@@ -1,4 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common/exceptions';
 import { UserSession } from '../../common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateCommentDto } from '../dto';
@@ -27,22 +31,48 @@ export class CommentsService {
     }
   }
 
-  async findAllByThreadId(threadId: number) {
+  async delete(session: UserSession, contentId: number) {
     try {
-      const comments = await this.prisma.thread.findUnique({
-        where: { id: threadId },
+      const content = await this.prisma.content.findUnique({
+        where: { id: contentId },
         include: {
-          content: {
+          content_parent: {
             select: {
-              child_contents: true,
+              owner_user: { select: { id: true } },
             },
           },
         },
       });
-      console.dir(comments, { depth: null });
-      return comments;
+
+      if (
+        content.content_parent.owner_user.id !== session.user.id &&
+        content.owner_user_id !== session.user.id
+      ) {
+        throw new UnauthorizedException('Comment does not belong to user');
+      }
+      await this.prisma.content.delete({
+        where: { id: contentId },
+      });
     } catch (err) {
-      console.error(err);
+      console.log(err);
+    }
+  }
+
+  async update(
+    session: UserSession,
+    contentId: number,
+    contentDescription: string,
+  ) {
+    try {
+      await this.prisma.content.update({
+        where: {
+          id: contentId,
+          owner_user_id: session.user.id,
+        },
+        data: { content_description: contentDescription },
+      });
+    } catch (err) {
+      throw new BadRequestException();
     }
   }
 }

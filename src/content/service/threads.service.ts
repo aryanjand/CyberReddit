@@ -42,6 +42,7 @@ export class ThreadsService {
           select: {
             owner_user: {
               select: {
+                id: true,
                 first_name: true,
                 last_name: true,
                 email: true,
@@ -51,11 +52,12 @@ export class ThreadsService {
             content_description: true,
             child_contents: {
               select: {
+                id: true,
                 created_at: true,
-                updated_at: true,
                 content_description: true,
                 owner_user: {
                   select: {
+                    id: true,
                     first_name: true,
                     last_name: true,
                     email: true,
