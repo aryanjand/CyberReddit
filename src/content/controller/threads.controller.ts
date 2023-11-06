@@ -29,7 +29,7 @@ export class ThreadsController {
   // Get all threads
   @HttpCode(HttpStatus.OK)
   @Render('threads')
-  @Get('')
+  @Get()
   async findAll(@Session() session: UserSession): Promise<any> {
     const threads = await this.threadsService.findAllThreads();
     return { threads: threads, authenticated: session.authenticated };
