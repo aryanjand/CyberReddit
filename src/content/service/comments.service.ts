@@ -65,14 +65,22 @@ export class CommentsService {
         },
       });
 
+      if (!content) {
+        throw new BadRequestException('Content does not exist');
+      }
+
       if (
-        content.content_parent.owner_user.id !== session.user.id &&
+        content.content_parent.owner_user.id !== session.user.id ||
         content.owner_user_id !== session.user.id
       ) {
         throw new UnauthorizedException('Comment does not belong to user');
       }
-      await this.prisma.content.delete({
+
+      await this.prisma.content.update({
         where: { id: contentId },
+        data: {
+          content_description: 'comment deleted',
+        },
       });
     } catch (err) {
       console.log(err);
