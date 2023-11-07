@@ -34,7 +34,7 @@ export class ThreadsService {
     return content_thread;
   }
 
-  async findThread(id: number) {
+  async findThread(id: number, search_user_id: number) {
     const content_threads = await this.prisma.thread.findUnique({
       where: { id },
       include: {
@@ -72,10 +72,22 @@ export class ThreadsService {
         },
       },
     });
+
+
+    const liked = await this.prisma.like.findFirst({
+      where: {
+        content_id: content_threads.content_id,
+        user_id: search_user_id
+      }
+    })
+
     if (!content_threads) {
       throw new ValidationException('No Threads', HttpStatus.NOT_FOUND);
     }
-    return content_threads;
+    return {
+      ...content_threads,
+      liked: liked
+    };
   }
 
   // Should we make these transactions

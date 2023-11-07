@@ -10,6 +10,7 @@ import { HealthModule } from './health/health.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { StorageModule } from './storage/storage.module';
 import { ContentModule } from './content/content.module';
+import { LikeModule } from './like/like.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ContentModule } from './content/content.module';
     HealthModule,
     AuthModule,
     ContentModule,
+    LikeModule,
     StorageModule,
     CloudinaryModule,
   ],
