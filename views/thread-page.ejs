@@ -96,7 +96,7 @@
 </div>
 <script nonce="<%= nonce %>">
   $(document).ready(() => {
-    $('.delete-comment').on('click', async (e) => {
+    $(document).on('click', '.delete-comment', async (e) => {
         e.preventDefault();
         const response = await fetch(`/comments/${e.target.id}`, {
           headers: {"content-type": "application/json"},
@@ -120,7 +120,7 @@
 
     })
 
-    $('.update-comment').on('click', async (e) => {
+    $(document).on('click', '.update-comment', async (e) => {
       e.preventDefault();
       const response = await fetch(`/comments/${e.target.id}`, {
         headers: {"content-type": "application/json"},
@@ -133,13 +133,13 @@
       }
     })
 
-    $('.reply-comment').on('click', async (e) => {
+    $(document).on('click', '.reply-comment', async (e) => {
         e.preventDefault();
         $('.reply-comment-form[id=' + e.target.id + ']').toggle()
         $(e.target).text($(e.target).text() == 'Reply' ? 'Cancel' : 'Reply');
     })
 
-    $('.show-replies').on('click', async (e) => {
+    $(document).on('click', '.show-replies', async (e) => {
         e.preventDefault();
         $('#reply-count-' + e.target.id).toggle()
         $('.show-replies[id=' + e.target.id + ']').text($('.show-replies[id=' + e.target.id + ']').text() == 'show' ? 'hide' : 'show');
@@ -161,14 +161,52 @@
             <div>
               ${replies[i].owner_user.email}
             </div>
-            <div>
-              ${replies[i].content_description}
+            <div class="content_description" id=${replies[i].id}>
             </div>
-            <i>${replies[i].child_contents.length} replies to this comment</i>
+            <div>
+              <i id="reply-count-${replies[i].id}">${replies[i].child_contents.length} replies to this comment</i>
+              <div style="margin-left: 20px;" id="reply-list-${replies[i].id}"></div>
+              <p style="cursor: pointer;" class="show-replies" id=${replies[i].id}>show</p>
+            </div>
+            <form action="/comments" method="POST" style="display:none;" class="reply-comment-form" id=${replies[i].id} %>>
+              <input type="hidden" name="thread_id" value=${<%= thread.id %>} />
+              <input type="hidden" name="content_parent_id" value=${replies[i].id} />
+              <div class="cyber-input">
+                <input
+                  name="content_description"
+                  required=true,
+                  type="textarea"
+                  placeholder="Comment" />
+              </div>
+              <button>Save</button>
+            </form>
           </div>`
           )
+          if (<%= authenticated %>) {
+            $('#reply-list-' + replies[i].id).append(
+              `<button class="reply-comment" id=${replies[i].id}>Reply</button>`
+            )
+            if (replies[i].owner_user.id === <%= user.id %> || <%= thread.content.owner_user.id %> === <%= user.id %>) {
+              $('#reply-list-' + replies[i].id).append(
+                `<button class="delete-comment" id=${replies[i].id}>Delete</button>`
+              )
+            }
+            if (replies[i].owner_user.id === <%= user.id %>) {
+              $('#reply-list-' + replies[i].id).append(
+                `<button class="update-comment" id=${replies[i].id}>Update</button>`
+              )
+            }
+          }
+
+          if (replies[i].owner_user.id === <%= user.id %>) {
+            $('.content_description[id=' + replies[i].id + ']').append(
+              `<label for="content_description"></label>
+              <textarea id="comment-${replies[i].id}" name="content_description" required=true>${replies[i].content_description}</textarea>`)
+          } else {
+            $('.content_description[id=' + replies[i].id + ']').append(`${replies[i].content_description}`)
+          }
         }
       })
-  })
+    })
 </script>
 <%- include("templates/footer") %>
