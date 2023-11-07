@@ -70,7 +70,7 @@ export class CommentsService {
       }
 
       if (
-        content.content_parent.owner_user.id !== session.user.id ||
+        content.content_parent.owner_user.id !== session.user.id &&
         content.owner_user_id !== session.user.id
       ) {
         throw new UnauthorizedException('Comment does not belong to user');
