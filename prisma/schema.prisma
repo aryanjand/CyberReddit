@@ -41,12 +41,12 @@ model Content {
   owner_user          User   @relation(fields: [owner_user_id], references: [id], onDelete: Cascade)
 
   content_parent_id Int?
-  content_parent    Content? @relation("ChildContents", fields: [content_parent_id], references: [id])
+  content_parent    Content?  @relation("ChildContents", fields: [content_parent_id], references: [id])
   child_contents    Content[] @relation("ChildContents")
 
-  like           Like[]
-  thread         Thread[]
-  comment        Comment[]
+  like    Like[]
+  thread  Thread[]
+  comment Comment[]
 
   @@index([owner_user_id])
   @@index([content_description])
@@ -62,6 +62,7 @@ model Like {
   content_id Int
   content    Content @relation(fields: [content_id], references: [id], onDelete: Cascade)
 
+  @@unique([user_id, content_id])
   @@index([user_id])
   @@index([content_id])
 }

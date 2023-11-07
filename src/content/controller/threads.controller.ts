@@ -52,7 +52,7 @@ export class ThreadsController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     await this.threadsService.patchThreadView(id);
-    const thread = await this.threadsService.findThread(id);
+    const thread = await this.threadsService.findThread(id, session.user ? session.user.id : 0);
     console.dir(thread, { depth: null });
     return {
       thread: thread,
