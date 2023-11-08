@@ -13,10 +13,10 @@ export class CommentsService {
 
   async findAllByContentParentId(id: number) {
     try {
-      const contents = await this.prisma.content.findMany({
+      const contents = [];
+      const child_contents = await this.prisma.content.findMany({
         where: { content_parent_id: id },
         include: {
-          child_contents: true,
           owner_user: {
             select: {
               id: true,
@@ -25,6 +25,23 @@ export class CommentsService {
           },
         },
       });
+
+      if (child_contents.length === 0) {
+        return contents;
+      }
+
+      contents.push(child_contents);
+
+      for (let i = 0; i < child_contents.length; i++) {
+        const nested_contents = await this.findAllByContentParentId(
+          child_contents[i].id,
+        );
+
+        if (nested_contents.length !== 0) {
+          contents.push(nested_contents);
+        }
+      }
+
       return contents;
     } catch (err) {
       console.log(err);
