@@ -1,0 +1,55 @@
+<div class="cyber-tile-big bg-dark" style="margin-bottom: 10px;">
+  <div id=<%= content.id%> class="cyber-tile-big bg-blue" style="margin-bottom: 5px;">
+    <code style="font-size: 12px; padding: 5px 5px 0 5px;"><%= content.owner_user.email %> • <span><%- include('date-display', { date: content.created_at }) %></span></code>
+
+    <% if (content.content_description === 'comment deleted') { %>
+      <p><i style="margin-left:5px; padding: 5px 5px 0 5px"><%= content.content_description %></i></p>
+    <% } else { %>
+      <div class="content-description-container" id=<%= content.id %>>
+        <p class="content-description" id=<%= content.id %> style="margin-left:5px; padding: 5px 5px 0 5px;"><%= content.content_description %></p>
+        <textarea
+          class="content-description-textarea" id=<%= content.id %>
+          cols="50"
+          style="display: none;"
+          id="content_description"
+          name="content_description"
+          class="cyber-tile fg-white bg-dark"
+          required=true
+          placeholder="<%= content.content_description %>"></textarea>
+        <span class="update-comment" id=<%= content.id %> style="display: none;">
+          <button id=<%= content.id %> class="cyber-button-small fg-white bg-dark" style="font-size: 8px; margin-left: 5px;">update</button>
+        </span>
+      </div>
+    <% } %>
+    <div class="reply-comment-form" id=<%= content.id %> style="display: none;">
+      <%- include('comment-form',  {thread_id: thread.id, content_parent_id: content.id }) %>
+    </div>
+    <div>
+      <span class="reply-comment">
+        <% if (content.content_description !== 'comment deleted') { %>
+          <button id=<%= content.id %> class="cyber-button-small fg-white bg-dark" style="font-size: 8px; margin-left: 5px;">reply</button>
+        <% } %>
+      </span>
+      <% if (content.owner_user.id === user.id) { %>
+        <% if (content.content_description !== 'comment deleted') { %>
+          <span class="edit-comment"><button id=<%= content.id %> class="cyber-button-small fg-white bg-dark" style="font-size: 8px; margin-left: 5px;">edit</button></span>
+        <% } %>
+      <% } %>
+      <% if (content.owner_user.id === user.id || thread.content.owner_user.id === user.id) { %>
+        <% if (content.content_description !== 'comment deleted') { %>
+          <span class="delete-comment"><button id=<%= content.id %> class="cyber-button-small fg-white bg-dark" style="font-size: 8px; margin-left: 5px;">delete</button></span>
+        <% } %>
+      <% } %>
+    </div>
+  </div>
+  <div style="margin-left: 25px;">
+      <% if (content.child_contents.length > 0) { %> 
+      <% content.child_contents.forEach(function(child) { %>
+          <% if (Array.isArray(child)) { %>
+          <% } else { %>
+              <%- include('comment-content', { content: child, thread: thread, user: user }) %>
+          <% } %>
+      <% }); %>
+      <% } %>
+  </div>
+</div>

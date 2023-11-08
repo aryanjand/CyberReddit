@@ -1,0 +1,15 @@
+<form action="/comments" method="POST" style="margin-bottom: 20px;">
+  <input type="hidden" name="thread_id" value=<%= thread_id %> />
+  <input type="hidden" name="content_parent_id" value=<%= content_parent_id %> />
+  <label for="content_description"></label>
+  <textarea
+    id="content_description"
+    name="content_description"
+    class="cyber-tile fg-white bg-dark"
+    required=true
+    rows="5"
+    cols="50"
+    placeholder="What's on your mind?"></textarea>
+  <button class="cyber-button-small fg-white bg-dark" type="submit">Comment</button>
+</form>
+

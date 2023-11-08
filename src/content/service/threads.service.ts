@@ -40,6 +40,8 @@ export class ThreadsService {
       include: {
         content: {
           select: {
+            created_at: true,
+            updated_at: true,
             owner_user: {
               select: {
                 id: true,
