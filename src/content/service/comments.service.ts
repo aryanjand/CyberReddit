@@ -22,9 +22,7 @@ export class CommentsService {
             email: true,
           },
         },
-        child_contents: {
-          include: { owner_user: { select: { id: true, email: true } } },
-        },
+        child_contents: true || false,
       },
     });
 
@@ -32,7 +30,7 @@ export class CommentsService {
 
     for (const content of contents) {
       const nestedContents = await this.findAllByContentParentId(content.id);
-      content.child_contents.push(nestedContents as any);
+      content.child_contents = nestedContents;
       nestedContentArray.push(content);
     }
 

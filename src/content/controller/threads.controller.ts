@@ -56,7 +56,7 @@ export class ThreadsController {
       id,
       session.user ? session.user.id : 0,
     );
-    console.dir(thread, { depth: null });
+    // console.dir(thread, { depth: null });
     return {
       thread: thread,
       authenticated: session.authenticated,
