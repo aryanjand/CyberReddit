@@ -68,8 +68,9 @@ export class ThreadsController {
   @Redirect('/threads')
   @Render('threads')
   @Post()
-  create(@Session() session: UserSession, @Body() dto: CreateThreadDto) {
-    return this.threadsService.createThread(dto, session.user.id);
+  async create(@Session() session: UserSession, @Body() dto: CreateThreadDto) {
+    await this.threadsService.createThread(dto, session.user.id);
+    return this.findAll(session);
   }
 
   // Update a post by ID
