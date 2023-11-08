@@ -25,9 +25,15 @@ export class ThreadsService {
   }
 
   async findMyThreads(userId: number) {
-    const content_thread = await this.prisma.content.findMany({
-      where: { owner_user_id: userId },
-      include: { thread: true },
+    const content_thread = await this.prisma.thread.findMany({
+      include: {
+        content: true
+      },
+      where: {
+        content: {
+          owner_user_id: userId
+        }
+      }
     });
     if (!content_thread) {
       throw new ValidationException('No Threads Found', HttpStatus.NOT_FOUND);
