@@ -71,7 +71,9 @@ export class ThreadsService {
       },
     });
 
-    const comments = await this.comment.findAllByContentParentId(id);
+    const comments = await this.comment.findAllByContentParentId(
+      content_threads.content_id,
+    );
 
     return {
       ...content_threads,
