@@ -46,52 +46,11 @@
       </div>
       <button>Submit</button>
     </form>
-    <% for (let i = 0; i < thread.content.child_contents.length; i++) { %>
-      <div class="cyber-tile"> 
-        <div> 
-          <%= thread.content.child_contents[i].owner_user.email %>
-        </div> 
-        <div>
-          <% if (thread.content.child_contents[i].owner_user.id === user.id) { %>
-            <label for="content_description"></label>
-            <textarea id="comment-<%= thread.content.child_contents[i].id %>" name="content_description" required=true><%= thread.content.child_contents[i].content_description %></textarea>
-          <% } else { %>
-            <%= thread.content.child_contents[i].content_description %>
-          <% } %>
-        </div>
-        <div>
-          <i id="reply-count-<%= thread.content.child_contents[i].id %>"><%= thread.content.child_contents[i].child_contents.length %> replies to this comment</i>
-          <div style="margin-left: 20px;" id="reply-list-<%= thread.content.child_contents[i].id %>"></div>
-          <p style="cursor: pointer;" class="show-replies" id=<%= thread.content.child_contents[i].id %>>show</p>
-        </div>
-          <% if (authenticated) { %> 
-          <form action="/comments" method="POST" style="display:none;" class="reply-comment-form" id=<%= thread.content.child_contents[i].id %>>
-            <input type="hidden" name="thread_id" value=<%= thread.id %> />
-            <input type="hidden" name="content_parent_id" value=<%= thread.content.child_contents[i].id %> />
-            <div class="cyber-input">
-              <input
-                name="content_description"
-                required=true,
-                type="textarea"
-                placeholder="Comment" />
-            </div>
-            <button>Save</button>
-          </form>
-            <button class="reply-comment" id=<%= thread.content.child_contents[i].id %>>Reply</button>
-            <% if (
-              thread.content.child_contents[i].owner_user.id === user.id ||
-              thread.content.owner_user.id === user.id
-            ) { %> 
-              <button class="delete-comment" id=<%= thread.content.child_contents[i].id %>>Delete</button>
-          <% } %>
-          <% if ( 
-              thread.content.child_contents[i].owner_user.id === user.id
-              ) { %>
-                <button class="update-comment" id=<%= thread.content.child_contents[i].id %>>Update</button>
-             <% } %>
-        <% } %>
-      </div>
-    <% } %>
+
+  <div class="content">
+    <% thread.comments.forEach(function(child) { %>
+        <% include('content', { content: child }) %>
+    <% }); %>
   </div>
 </div>
 <script nonce="<%= nonce %>">
