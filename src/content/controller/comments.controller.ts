@@ -27,6 +27,7 @@ export class CommentsController {
     return this.service.findAllByContentParentId(id);
   }
 
+  @HttpCode(HttpStatus.CREATED)
   @Redirect()
   @Post()
   create(@Session() session: UserSession, @Body() dto: CreateCommentDto) {
