@@ -50,22 +50,6 @@ export class ThreadsService {
             },
             views: true,
             content_description: true,
-            child_contents: {
-              select: {
-                id: true,
-                created_at: true,
-                content_description: true,
-                owner_user: {
-                  select: {
-                    id: true,
-                    first_name: true,
-                    last_name: true,
-                    email: true,
-                  },
-                },
-                child_contents: true,
-              },
-            },
             _count: {
               select: { like: true },
             },
@@ -74,20 +58,23 @@ export class ThreadsService {
       },
     });
 
+    if (!content_threads) {
+      throw new ValidationException('No Threads', HttpStatus.NOT_FOUND);
+    }
 
     const liked = await this.prisma.like.findFirst({
       where: {
         content_id: content_threads.content_id,
-        user_id: search_user_id
-      }
-    })
+        user_id: search_user_id,
+      },
+    });
 
-    if (!content_threads) {
-      throw new ValidationException('No Threads', HttpStatus.NOT_FOUND);
-    }
+    const comments = await this.comment.findAllByContentParentId(id);
+
     return {
       ...content_threads,
-      liked: liked
+      liked,
+      comments,
     };
   }
 

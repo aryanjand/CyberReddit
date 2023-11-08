@@ -3,6 +3,7 @@ import {
   BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common/exceptions';
+import { Content } from '@prisma/client';
 import { UserSession } from '../../common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateCommentDto } from '../dto';
@@ -11,42 +12,31 @@ import { CreateCommentDto } from '../dto';
 export class CommentsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAllByContentParentId(id: number) {
-    try {
-      const contents = [];
-      const child_contents = await this.prisma.content.findMany({
-        where: { content_parent_id: id },
-        include: {
-          owner_user: {
-            select: {
-              id: true,
-              email: true,
-            },
+  async findAllByContentParentId(id: number): Promise<Content[]> {
+    const contents = await this.prisma.content.findMany({
+      where: { content_parent_id: id },
+      include: {
+        owner_user: {
+          select: {
+            id: true,
+            email: true,
           },
         },
-      });
+        child_contents: {
+          include: { owner_user: { select: { id: true, email: true } } },
+        },
+      },
+    });
 
-      if (child_contents.length === 0) {
-        return contents;
-      }
+    const nestedContentArray: Content[] = [];
 
-      contents.push(child_contents);
-
-      for (let i = 0; i < child_contents.length; i++) {
-        const nested_contents = await this.findAllByContentParentId(
-          child_contents[i].id,
-        );
-
-        if (nested_contents.length !== 0) {
-          contents.push(nested_contents);
-        }
-      }
-
-      return contents;
-    } catch (err) {
-      console.log(err);
-      return [];
+    for (const content of contents) {
+      const nestedContents = await this.findAllByContentParentId(content.id);
+      content.child_contents.push(nestedContents as any);
+      nestedContentArray.push(content);
     }
+
+    return nestedContentArray;
   }
 
   async create(session: UserSession, dto: CreateCommentDto) {

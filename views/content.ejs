@@ -1,0 +1,16 @@
+<div class="content">
+    <p><%= content.content_description %></p>
+    <div class="nested-contents">
+        <% if (content.child_contents.length > 0) { %> 
+        <% content.child_contents.forEach(function(child) { %>
+            <% if (Array.isArray(child)) { %>
+                <div class="content">
+                    <p>This is an empty content</p>
+                </div>
+            <% } else { %>
+                <% include('content', { content: child }) %>
+            <% } %>
+        <% }); %>
+        <% } %>
+    </div>
+</div>
