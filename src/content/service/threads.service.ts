@@ -3,6 +3,7 @@ import { ValidationException } from '../../common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateThreadDto } from '../dto/createThread.dto';
 import { CommentsService } from './comments.service';
+import { Content, Thread } from '@prisma/client';
 
 @Injectable()
 export class ThreadsService {
@@ -34,6 +35,47 @@ export class ThreadsService {
     return content_thread;
   }
 
+
+
+
+
+  async searchComments(word: string) {
+    word = `*${word}*`;
+    try {
+      const contents = await this.prisma.$queryRaw<Thread[]>`
+            WITH RECURSIVE thread_score AS (
+              SELECT 
+                id AS parent_id,
+                SUM(MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE)) AS score
+              FROM Content
+              WHERE content_parent_id IS NULL
+              GROUP BY parent_id
+              UNION
+              SELECT
+                parent_id,
+                MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE) as score
+              FROM thread_score
+              JOIN Content ON Content.content_parent_id = thread_score.parent_id
+              JOIN Comment on Comment.content_id = Content.id
+            )
+            SELECT parent_id, SUM(score) 
+            FROM thread_score
+            JOIN Content On Content.id = parent_id
+            JOIN Thread On Thread.content_id = Content.id
+            GROUP BY parent_id
+            ORDER BY SUM(score) DESC;
+
+            
+`;
+      
+      console.log("Inside prisma ", contents)
+      return contents;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  }
+  
   async findThread(id: number, search_user_id: number) {
     const content_threads = await this.prisma.thread.findUnique({
       where: { id },
@@ -59,27 +101,27 @@ export class ThreadsService {
         },
       },
     });
-
+    
     if (!content_threads) {
       throw new ValidationException('No Threads', HttpStatus.NOT_FOUND);
     }
-
+    
     const liked = await this.prisma.like.findFirst({
       where: {
         content_id: content_threads.content_id,
         user_id: search_user_id,
       },
     });
-
+    
     const comments = await this.comment.findAllByContentParentId(id);
-
+    
     return {
       ...content_threads,
       liked,
       comments,
     };
   }
-
+  
   // Should we make these transactions
   async createThread(postData: CreateThreadDto, userId: number) {
     const content = await this.prisma.content.create({
@@ -110,13 +152,13 @@ export class ThreadsService {
         content: { update: { views: { increment: 1 } } },
       },
     });
-
+    
     if (!content) {
       throw new ValidationException('No Content', HttpStatus.NOT_FOUND);
     }
     return;
   }
-
+  
   // Should we make these transactions
   async patchThread(putData: CreateThreadDto, id: number) {
     const content = await this.prisma.content.update({
@@ -150,3 +192,39 @@ export class ThreadsService {
     return `Thread with ID ${id} was successful deleted`;
   }
 }
+
+
+// -- WITH RECURSIVE thread_score AS (
+//   --   SELECT
+//   --     id AS parent_id,
+//   --     SUM(MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE)) AS score
+//   --   FROM Content
+//   --   WHERE content_parent_id IS NULL
+//   --   UNION
+//   --   SELECT
+//   --     thread_score.parent_id,
+//   --     MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE) as score
+//   --   FROM Content
+//   --   JOIN Comment ON Content.id = Comment.content_id
+//   --   GROUP BY thread_score.parent_id
+//   -- )
+  
+//   -- SELECT *
+//   -- FROM thread_score;
+  
+  
+  
+//   -- WITH RECURSIVE
+//   --       thread_score AS (
+//   --       SELECT SUM(ORDER BY MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE)) AS score, id AS parent_id
+//   --       FROM Content
+//   --       WHERE content_parent_id IS NULL
+//   --          UNION
+//   --       SELECT ORDER BY MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE) as score, id AS parent_id
+//   --       FROM Content
+//   --       JOIN Comment ON Content.id = Comment.content_id
+//   --       GROUP BY parent_id
+//   --       )
+  
+//   --       SELECT *
+//   --       FROM thread_score;
