@@ -8,7 +8,11 @@ include("forms/create-thread-modal") %>
       <div class="cyber-input">
         <input type="text" id="word" name="word" placeholder="Search..." required=true />
       </div>
-      <button type="submit">Submit</button>
+      <button type="submit" class="cyber-button-small bg-black fg-white">
+        Submit
+        <span class="glitchtext">Some edgy txt</span>
+        <span class="tag">R25</span>
+    </button>
     </form>
     <% if (authenticated) { %>
     <button
@@ -32,7 +36,10 @@ include("forms/create-thread-modal") %>
           <p><%= thread.content_description %></p>
           <!-- Make it to the right  -->
           <div class="text-end">
-            <a href="/threads/<%= thread.id %>"><button>View &rarr;</button></a>
+            <a href="/threads/<%= thread.id %>"><button class="cyber-button-small bg-black fg-white">
+              View &rarr;
+              <span class="glitchtext">Some edgy txt</span>
+              <span class="tag">R25</span></a>
           </div>
         </div>
       </div>
