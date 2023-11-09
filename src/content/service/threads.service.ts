@@ -35,10 +35,6 @@ export class ThreadsService {
     return content_thread;
   }
 
-
-
-
-
   async searchComments(word: string) {
     word = `*${word}*`;
     try {
@@ -117,14 +113,7 @@ const transformedContents = contents.map((content) => ({
       throw new ValidationException('No Threads', HttpStatus.NOT_FOUND);
     }
 
-    console.dir(content_threads, { depth: null });
-
-    // const liked = await this.prisma.like.findFirst({
-    //   where: {
-    //     content_id: content_threads.content_id,
-    //     user_id: search_user_id,
-    //   },
-    // });
+    // console.dir(content_threads, { depth: null });
 
     const comments = await this.comment.findAllByContentParentId(
       content_threads.content_id,
@@ -132,7 +121,6 @@ const transformedContents = contents.map((content) => ({
 
     return {
       ...content_threads,
-      /* liked, */
       comments,
     };
   }
@@ -226,9 +214,7 @@ const transformedContents = contents.map((content) => ({
   
 //   -- SELECT *
 //   -- FROM thread_score;
-  
-  
-  
+
 //   -- WITH RECURSIVE
 //   --       thread_score AS (
 //   --       SELECT SUM(ORDER BY MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE)) AS score, id AS parent_id
@@ -240,5 +226,5 @@ const transformedContents = contents.map((content) => ({
 //   --       JOIN Comment ON Content.id = Comment.content_id
 //   --       GROUP BY parent_id
 //   --       )
-  
+
 //   --       SELECT *
