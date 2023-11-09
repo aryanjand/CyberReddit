@@ -46,6 +46,7 @@ export class ThreadsController {
 
   // Search comments  
   @HttpCode(HttpStatus.OK)
+  @Render('threads')
   @Get("search")
   async search(@Session() session: UserSession, @Query('word') word: string) {
     const threads = await this.threadsService.searchComments(word);

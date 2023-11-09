@@ -42,34 +42,40 @@ export class ThreadsService {
   async searchComments(word: string) {
     word = `*${word}*`;
     try {
-      const contents = await this.prisma.$queryRaw<Thread[]>`
-            WITH RECURSIVE thread_score AS (
-              SELECT 
-                id AS parent_id,
-                SUM(MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE)) AS score
-              FROM Content
-              WHERE content_parent_id IS NULL
-              GROUP BY parent_id
-              UNION
-              SELECT
-                parent_id,
-                MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE) as score
-              FROM thread_score
-              JOIN Content ON Content.content_parent_id = thread_score.parent_id
-              JOIN Comment on Comment.content_id = Content.id
-            )
-            SELECT parent_id, SUM(score) 
-            FROM thread_score
-            JOIN Content On Content.id = parent_id
-            JOIN Thread On Thread.content_id = Content.id
-            GROUP BY parent_id
-            ORDER BY SUM(score) DESC;
-
-            
+      const contents = await this.prisma.$queryRaw<(Thread&Content)[]>`
+          WITH RECURSIVE content_score AS (
+            SELECT
+              id AS content_id, 
+              id AS root_id,
+              SUM(MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE)) AS score
+            FROM Content
+            WHERE content_parent_id IS NULL
+            GROUP BY root_id
+            UNION
+            SELECT
+              Content.id AS content_id,
+              content_score.root_id AS root_id,
+              MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE) AS score
+            FROM content_score
+            JOIN Content ON Content.content_parent_id = content_score.content_id
+)
+            SELECT cs.root_id AS id, c.content_description, MAX(t.title) AS title, SUM(cs.score)
+            FROM content_score AS cs
+            JOIN Content AS c ON c.id = cs.root_id
+            JOIN Thread AS t ON t.content_id = c.id
+            GROUP BY cs.root_id, c.content_description
+            ORDER BY SUM(cs.score) DESC;
+   
 `;
       
-      console.log("Inside prisma ", contents)
-      return contents;
+const transformedContents = contents.map((content) => ({
+  thread: { id: content.id },
+  content_description: content.content_description,
+  title: content.title
+}));
+      
+      console.log("Inside prisma ", transformedContents)
+      return transformedContents;
     } catch (err) {
       console.log(err);
       return [];
