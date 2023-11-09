@@ -36,7 +36,7 @@ model Content {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  content_description String @db.VarChar(300)
+  content_description String @db.Text
   views               Int    @default(0)
   owner_user_id       Int
   owner_user          User   @relation(fields: [owner_user_id], references: [id], onDelete: Cascade)
