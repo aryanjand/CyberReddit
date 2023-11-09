@@ -38,7 +38,9 @@ export class ThreadsService {
   async searchComments(word: string) {
     word = `*${word}*`;
     try {
-      const contents = await this.prisma.$queryRaw<(Thread&Content)[]>`
+      const contents = await this.prisma.$queryRaw<
+        (Thread & Content & { score: number })[]
+      >`
           WITH RECURSIVE content_score AS (
             SELECT
               id AS content_id, 
@@ -54,30 +56,31 @@ export class ThreadsService {
               MATCH(Content.content_description) AGAINST(${word} IN BOOLEAN MODE) AS score
             FROM content_score
             JOIN Content ON Content.content_parent_id = content_score.content_id
-)
-            SELECT cs.root_id AS id, c.content_description, MAX(t.title) AS title, SUM(cs.score)
+            )
+            SELECT cs.root_id AS id, c.content_description, MAX(t.title) AS title, SUM(cs.score) as score
             FROM content_score AS cs
             JOIN Content AS c ON c.id = cs.root_id
             JOIN Thread AS t ON t.content_id = c.id
             GROUP BY cs.root_id, c.content_description
             ORDER BY SUM(cs.score) DESC;
    
-`;
-      
-const transformedContents = contents.map((content) => ({
-  thread: { id: content.id },
-  content_description: content.content_description,
-  title: content.title
-}));
-      
-      console.log("Inside prisma ", transformedContents)
+      `;
+
+      const transformedContents = contents.map((content) => ({
+        thread: { id: content.id },
+        content_description: content.content_description,
+        title: content.title,
+        score: content.score,
+      }));
+
+      console.log('Inside prisma ', transformedContents);
       return transformedContents;
     } catch (err) {
       console.log(err);
       return [];
     }
   }
-  
+
   async findThread(id: number, search_user_id: number) {
     const content_threads = await this.prisma.thread.findUnique({
       where: { id },
@@ -108,7 +111,7 @@ const transformedContents = contents.map((content) => ({
         },
       },
     });
-    
+
     if (!content_threads) {
       throw new ValidationException('No Threads', HttpStatus.NOT_FOUND);
     }
@@ -124,7 +127,7 @@ const transformedContents = contents.map((content) => ({
       comments,
     };
   }
-  
+
   // Should we make these transactions
   async createThread(postData: CreateThreadDto, userId: number) {
     const content = await this.prisma.content.create({
@@ -155,13 +158,13 @@ const transformedContents = contents.map((content) => ({
         content: { update: { views: { increment: 1 } } },
       },
     });
-    
+
     if (!content) {
       throw new ValidationException('No Content', HttpStatus.NOT_FOUND);
     }
     return;
   }
-  
+
   // Should we make these transactions
   async patchThread(putData: CreateThreadDto, id: number) {
     const content = await this.prisma.content.update({
@@ -196,7 +199,6 @@ const transformedContents = contents.map((content) => ({
   }
 }
 
-
 // -- WITH RECURSIVE thread_score AS (
 //   --   SELECT
 //   --     id AS parent_id,
@@ -211,7 +213,7 @@ const transformedContents = contents.map((content) => ({
 //   --   JOIN Comment ON Content.id = Comment.content_id
 //   --   GROUP BY thread_score.parent_id
 //   -- )
-  
+
 //   -- SELECT *
 //   -- FROM thread_score;
 
