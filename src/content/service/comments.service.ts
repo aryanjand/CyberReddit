@@ -16,6 +16,10 @@ export class CommentsService {
     const contents = await this.prisma.content.findMany({
       where: { content_parent_id: id },
       include: {
+        like: true,
+        _count: {
+          select: { like: true },
+        },
         owner_user: {
           select: {
             id: true,

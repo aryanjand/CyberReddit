@@ -15,7 +15,7 @@
       <div class="mr-3">
         <p>Likes: <%= thread.content._count.like %></p>
       </div>
-      <%- include('like', { liked: thread.liked, content_id: thread.content_id, thread_id: thread.id  }) %>
+      <%- include('like', { liked: thread.content.like[0], content_id: thread.content_id, thread_id: thread.id  }) %>
     </div>
     <% if (user !== undefined) { %> 
       <i style="font-size: 11px;">Comment as <%= user.email %></i>
@@ -31,7 +31,6 @@
   $(document).ready(() => {
     $('.delete-like').on('click', async (e) => {
       e.preventDefault();
-      console.log(e.target.id)
         const response = await fetch(`/likes/${e.target.id}`, {
           headers: {"content-type": "application/json"},
           method: 'DELETE',

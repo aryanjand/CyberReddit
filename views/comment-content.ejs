@@ -1,3 +1,4 @@
+<% %>
 <div class="cyber-tile-big bg-dark" style="margin-bottom: 10px;">
   <div id=<%= content.id%> class="cyber-tile-big bg-blue" style="margin-bottom: 5px;">
     <code style="font-size: 12px; padding: 5px 5px 0 5px;"><%= content.owner_user.email %> • <span><%- include('date-display', { date: content.created_at }) %></span></code>
@@ -7,6 +8,7 @@
     <% } else { %>
       <div class="content-description-container" id=<%= content.id %>>
         <p class="content-description" id=<%= content.id %> style="margin-left:5px; padding: 5px 5px 0 5px;"><%= content.content_description %></p>
+        <p style="margin-left:5px; font-size: 12px;">Likes: <%= content._count.like %></p>
         <textarea
           class="content-description-textarea" id=<%= content.id %>
           cols="50"
@@ -40,6 +42,9 @@
           <span class="delete-comment"><button id=<%= content.id %> class="cyber-button-small fg-white bg-dark" style="font-size: 8px; margin-left: 5px;">delete</button></span>
         <% } %>
       <% } %>
+      <div>
+        <%- include('like', { liked: content.like[0], content_id: content.id, thread_id: thread.id  }) %>
+      </div>
     </div>
   </div>
   <div style="margin-left: 25px;">
@@ -53,3 +58,4 @@
       <% } %>
   </div>
 </div>
+<% %>

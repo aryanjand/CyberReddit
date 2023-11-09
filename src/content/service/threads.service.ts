@@ -40,6 +40,11 @@ export class ThreadsService {
       include: {
         content: {
           select: {
+            like: {
+              where: {
+                user_id: search_user_id,
+              },
+            },
             created_at: true,
             updated_at: true,
             owner_user: {
@@ -64,12 +69,14 @@ export class ThreadsService {
       throw new ValidationException('No Threads', HttpStatus.NOT_FOUND);
     }
 
-    const liked = await this.prisma.like.findFirst({
-      where: {
-        content_id: content_threads.content_id,
-        user_id: search_user_id,
-      },
-    });
+    console.dir(content_threads, { depth: null });
+
+    // const liked = await this.prisma.like.findFirst({
+    //   where: {
+    //     content_id: content_threads.content_id,
+    //     user_id: search_user_id,
+    //   },
+    // });
 
     const comments = await this.comment.findAllByContentParentId(
       content_threads.content_id,
@@ -77,7 +84,7 @@ export class ThreadsService {
 
     return {
       ...content_threads,
-      liked,
+      /* liked, */
       comments,
     };
   }
