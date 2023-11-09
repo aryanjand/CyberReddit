@@ -22,7 +22,7 @@
     <% if (user !== undefined) { %> 
       <i style="font-size: 11px;">Comment as <%= user.email %></i>
     <% } %>
-    <%- include('comment-form', {thread_id: thread.id, content_parent_id: thread.content_id }) %>
+    <%- include('forms/comment-form', {thread_id: thread.id, content_parent_id: thread.content_id }) %>
   <div class="comment">
     <% thread.comments.forEach(function(child) { %>
         <%- include('comment-content', { content: child, thread: thread, user: user }) %>

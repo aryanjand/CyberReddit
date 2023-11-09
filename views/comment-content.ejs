@@ -24,7 +24,7 @@
       </div>
     <% } %>
     <div class="reply-comment-form" id=<%= content.id %> style="display: none;">
-      <%- include('comment-form',  {thread_id: thread.id, content_parent_id: content.id }) %>
+      <%- include('forms/comment-form',  {thread_id: thread.id, content_parent_id: content.id }) %>
     </div>
     <div>
       <% if (user) { %>

@@ -6,7 +6,7 @@ include("forms/create-thread-modal") %>
     <h3 class="cyber-h">Threads</h3>
     <form class="searchForm" method="GET">
       <div class="cyber-input">
-        <input type="text" id="searchInput" placeholder="Search..." />
+        <input type="text" id="searchInput" placeholder="Search..." required=true />
       </div>
       <button type="submit">Submit</button>
     </form>
@@ -41,24 +41,22 @@ include("forms/create-thread-modal") %>
   </div>
 </div>
 <script nonce="<%= nonce %>">
-document.addEventListener('DOMContentLoaded', () => {
+$(document).ready(() => {
   const searchForm = document.getElementById('searchForm');
   const searchInput = document.getElementById('searchInput');
 
   $('.searchForm').on('submit', async (event) => {
     event.preventDefault(); // Prevent the default form submission
     const searchQuery = searchInput.value;
-    console.log(searchQuery)
     await fetch(`/threads/search?word=${searchQuery}`, {
       method: 'GET',
     })
   });
+
+  $('#create-thread-modal').on('shown.bs.modal', function () {
+    $('#trigger-modal').trigger('focus');
+  });
 });
 
-  $(document).ready(function () {
-    $('#create-thread-modal').on('shown.bs.modal', function () {
-      $('#trigger-modal').trigger('focus');
-    });
-  });
 </script>
 <%- include("templates/footer") %>

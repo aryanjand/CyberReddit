@@ -1,8 +1,9 @@
-<div class="modal fade" tabindex="-1" role="dialog" id="create-thread-modal">
+<% %>
+<div class="modal fade" tabindex="-1" role="dialog" id="create-content-modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Create Content</h5>
+        <h5 class="modal-title">Change Profile Picture</h5>
         <button
           type="button"
           class="close"
@@ -17,9 +18,12 @@
           ref="uploadForm"
           id="content-form"
           method="POST"
-          action="/content/my-content"
+          action="/storage/avatars/upload"
           encType="multipart/form-data"
-        ></form>
+        >
+          <input type="file" name="file" required="true" accept="image/*" />
+          <input type="submit" value="Save" />
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -29,4 +33,4 @@
     </div>
   </div>
 </div>
-x
+<% %>

@@ -1,10 +1,16 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Redirect, Render } from '@nestjs/common';
 
 @Controller()
 export class AppController {
   @Get()
-  @Render('index')
+  @Redirect('threads')
   root() {
-    return { message: 'Hello world!' };
+    return;
+  }
+
+  @Get('cyberpunk')
+  @Render('cyberpunk')
+  cyberpunk() {
+    return;
   }
 }
