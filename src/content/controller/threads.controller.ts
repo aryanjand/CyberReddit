@@ -15,6 +15,7 @@ import {
   Session,
   ParseIntPipe,
   Redirect,
+  Query,
 } from '@nestjs/common';
 import { ThreadsService } from '../service/threads.service';
 import { AuthGuard, UserSession } from '../../common';
@@ -42,6 +43,16 @@ export class ThreadsController {
     const threads = await this.threadsService.findMyThreads(session.user.id);
     return { threads: threads, authenticated: true };
   }
+
+  // Search comments  
+  @HttpCode(HttpStatus.OK)
+  @Render('threads')
+  @Get("search")
+  async search(@Session() session: UserSession, @Query('word') word: string) {
+    const threads = await this.threadsService.searchComments(word);
+    console.log("Search for the word ", threads, word)
+    return { threads: threads, authenticated: session.authenticated };;
+   }
 
   // Get a specific post by ID
   @HttpCode(HttpStatus.OK)
