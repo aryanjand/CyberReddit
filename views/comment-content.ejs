@@ -27,23 +27,27 @@
       <%- include('comment-form',  {thread_id: thread.id, content_parent_id: content.id }) %>
     </div>
     <div>
-      <span class="reply-comment">
-        <% if (content.content_description !== 'comment deleted') { %>
-          <button id=<%= content.id %> class="cyber-button-small fg-white bg-dark" style="font-size: 8px; margin-left: 5px;">reply</button>
-        <% } %>
-      </span>
-      <% if (content.owner_user.id === user.id) { %>
+      <% if (user) { %>
+        <span class="reply-comment">
+          <% if (content.content_description !== 'comment deleted') { %>
+            <button id=<%= content.id %> class="cyber-button-small fg-white bg-dark" style="font-size: 8px; margin-left: 5px;">reply</button>
+          <% } %>
+        </span>
+      <% } %>
+      <% if (user && content.owner_user.id === user.id) { %>
         <% if (content.content_description !== 'comment deleted') { %>
           <span class="edit-comment"><button id=<%= content.id %> class="cyber-button-small fg-white bg-dark" style="font-size: 8px; margin-left: 5px;">edit</button></span>
         <% } %>
       <% } %>
-      <% if (content.owner_user.id === user.id || thread.content.owner_user.id === user.id) { %>
+      <% if (user && content.owner_user.id === user.id || user && thread.content.owner_user.id === user.id) { %>
         <% if (content.content_description !== 'comment deleted') { %>
           <span class="delete-comment"><button id=<%= content.id %> class="cyber-button-small fg-white bg-dark" style="font-size: 8px; margin-left: 5px;">delete</button></span>
         <% } %>
       <% } %>
       <div>
-        <%- include('like', { liked: content.like[0], content_id: content.id, thread_id: thread.id  }) %>
+        <% if (user) { %>
+          <%- include('like', { liked: content.like[0], content_id: content.id, thread_id: thread.id  }) %>
+        <% } %>
       </div>
     </div>
   </div>

@@ -15,7 +15,9 @@
       <div class="mr-3">
         <p>Likes: <%= thread.content._count.like %></p>
       </div>
-      <%- include('like', { liked: thread.content.like[0], content_id: thread.content_id, thread_id: thread.id  }) %>
+      <% if (authenticated) { %>
+        <%- include('like', { liked: thread.content.like[0], content_id: thread.content_id, thread_id: thread.id  }) %>
+      <% } %>
     </div>
     <% if (user !== undefined) { %> 
       <i style="font-size: 11px;">Comment as <%= user.email %></i>
