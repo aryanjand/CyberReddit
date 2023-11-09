@@ -44,15 +44,15 @@ export class ThreadsController {
     return { threads: threads, authenticated: true };
   }
 
-  // Search comments  
+  // Search comments
   @HttpCode(HttpStatus.OK)
   @Render('threads')
-  @Get("search")
+  @Get('search')
   async search(@Session() session: UserSession, @Query('word') word: string) {
     const threads = await this.threadsService.searchComments(word);
-    console.log("Search for the word ", threads, word)
-    return { threads: threads, authenticated: session.authenticated };;
-   }
+    console.log('Search for the word ', threads);
+    return { threads: threads, authenticated: session.authenticated };
+  }
 
   // Get a specific post by ID
   @HttpCode(HttpStatus.OK)

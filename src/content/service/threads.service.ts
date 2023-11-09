@@ -57,24 +57,21 @@ export class ThreadsService {
             FROM content_score
             JOIN Content ON Content.content_parent_id = content_score.content_id
             )
-            SELECT cs.root_id AS id, c.content_description, MAX(t.title) AS title, SUM(cs.score) as score
-            FROM content_score AS cs
-            JOIN Content AS c ON c.id = cs.root_id
-            JOIN Thread AS t ON t.content_id = c.id
-            GROUP BY cs.root_id, c.content_description
-            ORDER BY SUM(cs.score) DESC;
+          SELECT cs.root_id AS content_id, MAX(t.title) AS title, SUM(cs.score) as score, MAX(t.id) as id
+          FROM content_score AS cs
+          JOIN Content AS c ON c.id = cs.root_id
+          JOIN Thread AS t ON t.content_id = c.id
+          GROUP BY cs.root_id, c.content_description
+          ORDER BY SUM(cs.score) DESC
    
       `;
 
-      const transformedContents = contents.map((content) => ({
-        thread: { id: content.id },
-        content_description: content.content_description,
-        title: content.title,
-        score: content.score,
-      }));
+      const condition = (content: Thread & Content & { score: number }) =>
+        content.score > 0;
 
-      console.log('Inside prisma ', transformedContents);
-      return transformedContents;
+      const transformed = contents.filter(condition);
+
+      return transformed;
     } catch (err) {
       console.log(err);
       return [];

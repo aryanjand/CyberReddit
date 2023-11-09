@@ -4,9 +4,9 @@ include("forms/create-thread-modal") %>
 <div class="container">
   <div class="d-flex justify-content-between gap-5 mb-2">
     <h3 class="cyber-h">Threads</h3>
-    <form class="searchForm" method="GET">
+    <form class="searchForm" method="GET" action="/threads/search">
       <div class="cyber-input">
-        <input type="text" id="searchInput" placeholder="Search..." required=true />
+        <input type="text" id="word" name="word" placeholder="Search..." required=true />
       </div>
       <button type="submit">Submit</button>
     </form>
@@ -42,17 +42,6 @@ include("forms/create-thread-modal") %>
 </div>
 <script nonce="<%= nonce %>">
 $(document).ready(() => {
-  const searchForm = document.getElementById('searchForm');
-  const searchInput = document.getElementById('searchInput');
-
-  $('.searchForm').on('submit', async (event) => {
-    event.preventDefault(); // Prevent the default form submission
-    const searchQuery = searchInput.value;
-    await fetch(`/threads/search?word=${searchQuery}`, {
-      method: 'GET',
-    })
-  });
-
   $('#create-thread-modal').on('shown.bs.modal', function () {
     $('#trigger-modal').trigger('focus');
   });
